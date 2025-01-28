@@ -54,7 +54,8 @@ Before you begin, ensure you have the following installed:
 1. **Clone the repository**:
    ```bash
    git clone https://github.com/yourusername/Blooming.git
-   cd Blooming```
+   cd Blooming
+   ```
 
 2. **Install frontend dependencies**:
     - **Navigate to the ecommerce folder**:
@@ -75,7 +76,7 @@ Before you begin, ensure you have the following installed:
     cd ../admin
     npm install
     ```
-    
+
 ## Set Up Environment Variables
 
 ### Setup Configuration Files
