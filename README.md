@@ -59,22 +59,23 @@ Before you begin, ensure you have the following installed:
 2. **Install frontend dependencies**:
     - **Navigate to the ecommerce folder**:
     ```bash cd ecommerce
-    npm install ```
+    npm install 
+    ```
 
 3.  **Install backend dependencies**: 
         **Navigate to the backend folder**:
     ```bash
     cd ../backend 
-    npm install```
+    npm install
+    ```
 
 4. **Install Admin Panel dependencies**:    
         **Navigate to the admin folder**:
     ```bash
     cd ../admin
-    npm install```
-
-
-
+    npm install
+    ```
+    
 ## Set Up Environment Variables
 
 ### Setup Configuration Files
