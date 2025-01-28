@@ -2,14 +2,15 @@ import mongoose from "mongoose";
 
 const orderSchema = new mongoose.Schema(
 	{
-		user: { type: mongoose.Schema.Types.ObjectId, ref: "user", required: true },
+		user: { type:String, ref: "user", required: true },
+		items : {type : Array , required : true},
 		mobileNumber: { type: String, required: true },
-		address: { type: String, required: true },
+		address: { type: Object, required: true },
 		paymentMode: { type: String, enum: ["UPI", "Card", "COD"], required: true },
-		status: { type: String, default: "Pending" },
-		createdAt: { type: Date, default: Date.now },
-	},
-	{ timestamps: true }
+		payment : {type:Boolean , required : true},
+		status: { type: String, required : true , default:'Order Placed'},
+		date: { type: Number,required:true},
+	}
 );
 
 const orderModel =

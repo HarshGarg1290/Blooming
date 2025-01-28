@@ -9,20 +9,23 @@ const Cart = ({ isOpen, onClose }) => {
 	const [cartData, setCartData] = useState([]);
 
 	useEffect(() => {
-		const temp = [];
-		for (const items in cartItems) {
-			for (const item in cartItems[items]) {
-				if (cartItems[items][item] > 0) {
-					temp.push({
-						_id: items,
-						size: item,
-						quantity: cartItems[items][item],
-					});
+
+		if (products.length > 0) {
+			const temp = [];
+			for (const items in cartItems) {
+				for (const item in cartItems[items]) {
+					if (cartItems[items][item] > 0) {
+						temp.push({
+							_id: items,
+							size: item,
+							quantity: cartItems[items][item],
+						});
+					}
 				}
 			}
+			setCartData(temp);
 		}
-		setCartData(temp);
-	}, [cartItems]);
+	}, [cartItems,products]);
 
 	const calculateTotal = () => {
 		return cartData

@@ -101,7 +101,21 @@ const ShopContextProvider = (props) => {
 		}
 
 		setCartItems(cartData);
+		if (token) {
+			try {
+				await axios.post(
+					backendUrl + "/api/cart/add",
+					{ itemId, size },
+					{ headers: {token } }
+				);
+			} catch (error) {
+				console.log(error);
+				toast.error(error.message);
+			}
+		}
 		setIsCartOpen(true);
+
+		
 	};
 
 	const [isCartOpen, setIsCartOpen] = useState(false);
@@ -110,19 +124,32 @@ const ShopContextProvider = (props) => {
 		setIsCartOpen(!isCartOpen);
 	};
 
-	const updateCartQuantity = (itemId, size, newQuantity) => {
+	const updateCartQuantity = async (itemId, size, newQuantity) => {
 		let cartData = structuredClone(cartItems);
 
 		if (newQuantity === 0) {
-			delete cartData[itemId][size]; // Remove the item if quantity is 0
+			delete cartData[itemId][size];
 			if (Object.keys(cartData[itemId]).length === 0) {
-				delete cartData[itemId]; // Remove the product entirely if no sizes left
+				delete cartData[itemId];
 			}
 		} else {
 			cartData[itemId][size] = newQuantity; // Update quantity
 		}
 
 		setCartItems(cartData);
+
+		if (token) {
+			try {
+			await axios.post(
+				backendUrl + "/api/cart/update",
+				{ itemId, size, quantity: newQuantity },
+				{ headers: { token } }
+			);
+			} catch (error) {
+				console.log(error);
+				toast.error(error.message);
+			}
+		}
 	};
 
 	const getCartCount = () => {
@@ -157,6 +184,18 @@ const ShopContextProvider = (props) => {
 		}
 	};
 
+	const getUserCart = async (token) => {
+		try {
+			const response = await axios.post(backendUrl + '/api/cart/get', {}, { headers: { token } })
+			if (response.data.success) {
+				setCartItems(response.data.cartData)
+			}
+		} catch (error) {
+			console.log(error);
+			toast.error(error.message);
+		}
+	}
+
 	useEffect(() => {
 		getProductsData();
 	}, []);
@@ -164,6 +203,7 @@ const ShopContextProvider = (props) => {
 	useEffect(() => {
 		if (!token && localStorage.getItem("token")) {
 			setToken(localStorage.getItem("token"));
+			getUserCart(localStorage.getItem("token"));
 		}
 	}, []);
 
