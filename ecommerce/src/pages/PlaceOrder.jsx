@@ -1,11 +1,39 @@
 import { useContext, useState, useEffect, useMemo } from "react";
 import { ShopContext } from "../context/ShopContext";
 import Title from "../components/Title";
-
+import axios from "axios";
+import { toast } from "react-toastify";
 const PlaceOrder = () => {
-	const { products, currency, cartItems, navigate } = useContext(ShopContext);
+	const {
+		products,
+		currency,
+		cartItems,
+		navigate,
+		backendUrl,
+		token,
+		setCartItems,
+		
+	} = useContext(ShopContext);
 	const [cartData, setCartData] = useState([]);
 	const [method, setMethod] = useState("cod");
+	
+	const [formData, setFormData] = useState({
+		firstName: "",
+		lastName: "",
+		email: "",
+		address: "",
+		apartment: "",
+		city: "",
+		state: "",
+		zip: "",
+		phone: "",
+	});
+
+	const onChangeHandler = (e) => {
+		const name = e.target.name;
+		const value = e.target.value;
+		setFormData((prevData) => ({ ...prevData, [name]: value }));
+	};
 	const shippingFee = 50.0;
 
 	useEffect(() => {
@@ -40,16 +68,65 @@ const PlaceOrder = () => {
 		[total, shippingFee]
 	);
 
-	const handlePlaceOrder = () => {
-		if (navigate) {
-			navigate("/orders");
-		} else {
-			console.error("Navigation function not available");
+	const handlePlaceOrder = async (e) => {
+		e.preventDefault();
+		try {
+			let orderItems = [];
+			for (const items in cartItems) {
+				for (const item in cartItems[items]) {
+					if (cartItems[items][item] > 0) {
+						const itemInfo = structuredClone(
+							products.find((product) => product._id === items)
+						);
+						if (itemInfo) {
+							itemInfo.size = item;
+							itemInfo.quantity = cartItems[items][item];
+							orderItems.push(itemInfo);
+						}
+					}
+				}
+			}
+
+			let orderData = {
+				
+				address: formData,
+				items: orderItems,
+				amount: grandTotal,
+				phone:formData.phone,
+
+			};
+
+
+			switch (method) {
+				case "cod": {
+					const response = await axios.post(
+						backendUrl + "/api/order/place",
+						orderData,
+						{ headers: { token } }
+					);
+					if (response.data.success) {
+						setCartItems({});
+						navigate("/orders");
+					} else {
+						toast.error(response.data.message);
+					}
+					break;
+				}
+				default:
+					break;
+			}
+		} catch (error) {
+			console.log(error);
+			toast.error(error.message)
+			
 		}
 	};
 
 	return (
-		<div className="flex flex-col justify-between sm:flex-row  pt-24 sm:pt-14 min-h-[80vh] border-t">
+		<form
+			onSubmit={handlePlaceOrder}
+			className="flex flex-col justify-between sm:flex-row  pt-24 sm:pt-14 min-h-[80vh] border-t"
+		>
 			{/* Right side: Cart Summary (This should come first on mobile) */}
 			<div className="flex flex-col w-full sm:max-w-[480px] bg-gray-100 p-6 rounded-lg sm:order-2">
 				<div className="font-hubot text-2xl mb-4 font-semibold text-gray-800">
@@ -121,6 +198,9 @@ const PlaceOrder = () => {
 				{/* Form Fields */}
 				<div className="flex gap-3">
 					<input
+						onChange={onChangeHandler}
+						name="firstName"
+						value={formData.firstName}
 						className="border border-gray-300 rounded py-1.5 px-3.5 w-full"
 						type="text"
 						placeholder="First Name"
@@ -128,6 +208,9 @@ const PlaceOrder = () => {
 						required
 					/>
 					<input
+						onChange={onChangeHandler}
+						name="lastName"
+						value={formData.lastName}
 						className="border border-gray-300 rounded py-1.5 px-3.5 w-full"
 						type="text"
 						placeholder="Last Name"
@@ -137,6 +220,9 @@ const PlaceOrder = () => {
 				</div>
 
 				<input
+					onChange={onChangeHandler}
+					name="email"
+					value={formData.email}
 					className="border border-gray-300 rounded py-1.5 px-3.5 w-full"
 					type="email"
 					placeholder="Email Address"
@@ -144,6 +230,9 @@ const PlaceOrder = () => {
 					required
 				/>
 				<input
+					onChange={onChangeHandler}
+					name="address"
+					value={formData.address}
 					className="border border-gray-300 rounded py-1.5 px-3.5 w-full"
 					type="text"
 					placeholder="Address"
@@ -151,6 +240,9 @@ const PlaceOrder = () => {
 					required
 				/>
 				<input
+					onChange={onChangeHandler}
+					name="apartment"
+					value={formData.apartment}
 					className="border border-gray-300 rounded py-1.5 px-3.5 w-full"
 					type="text"
 					placeholder="Apartment, Suite, etc (optional)"
@@ -158,6 +250,9 @@ const PlaceOrder = () => {
 				/>
 				<div className="flex gap-3">
 					<input
+						onChange={onChangeHandler}
+						name="city"
+						value={formData.city}
 						className="border border-gray-300 rounded py-1.5 px-3.5 w-full"
 						type="text"
 						placeholder="City"
@@ -165,9 +260,12 @@ const PlaceOrder = () => {
 						required
 					/>
 					<select
+						name="state"
+						value={formData.state}
 						className="border border-gray-300 rounded py-1.5 px-3.5 w-full text-gray-400"
-						defaultValue=""
+						
 						onChange={(e) => {
+							onChangeHandler(e);
 							e.target.classList.toggle("text-black", e.target.value !== "");
 							e.target.classList.toggle("text-gray-400", e.target.value === "");
 						}}
@@ -212,6 +310,9 @@ const PlaceOrder = () => {
 					</select>
 
 					<input
+						onChange={onChangeHandler}
+						name="zip"
+						value={formData.zip}
 						className="border border-gray-300 rounded py-1.5 px-3.5 w-full"
 						type="number"
 						placeholder="Pin Code"
@@ -220,6 +321,9 @@ const PlaceOrder = () => {
 					/>
 				</div>
 				<input
+					onChange={onChangeHandler}
+					name="phone"
+					value={formData.phone}
 					className="border border-gray-300 rounded py-1.5 px-3.5 w-full"
 					type="number"
 					placeholder="Phone Number"
@@ -268,7 +372,7 @@ const PlaceOrder = () => {
 
 				{/* Place Order Button */}
 				<button
-					onClick={handlePlaceOrder}
+					type="submit"
 					disabled={cartData.length === 0}
 					className={`bg-black text-white py-2 px-4 rounded mt-8 font-semibold ${
 						cartData.length === 0
@@ -279,7 +383,7 @@ const PlaceOrder = () => {
 					Place Order
 				</button>
 			</div>
-		</div>
+		</form>
 	);
 };
 

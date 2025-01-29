@@ -33,10 +33,17 @@ const Cart = ({ isOpen, onClose }) => {
 				const productData = products.find(
 					(product) => product._id === item._id
 				);
+
+				if (!productData) {
+					console.warn(`Product not found for item ID: ${item._id}`);
+					return total; // Skip this item
+				}
+
 				return total + productData.price * item.quantity;
 			}, 0)
 			.toFixed(2);
 	};
+
 
 	const [ready, setReady] = useState(false);
 

@@ -169,6 +169,24 @@ const ShopContextProvider = (props) => {
 		return totalCount;
 	};
 
+	const getCartAmount = () => {
+		return cartData
+			.reduce((total, item) => {
+				const productData = products.find(
+					(product) => product._id === item._id
+				);
+
+				if (!productData) {
+					console.warn(`Product not found for item ID: ${item._id}`);
+					return total; // Skip this item
+				}
+
+				return total + productData.price * item.quantity;
+			}, 0)
+			.toFixed(2);
+	};
+
+
 	const getProductsData = async () => {
 		try {
 			const response = await axios.get(backendUrl + "/api/product/list");
@@ -228,6 +246,7 @@ const ShopContextProvider = (props) => {
 		backendUrl,
 		token,
 		setToken,
+		getCartAmount,
 	};
 
 	return (
