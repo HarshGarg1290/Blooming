@@ -1,5 +1,8 @@
-import { useState } from "react";
+import { useContext, useState } from "react";
 import { Mail, Phone, MapPin } from "lucide-react";
+import axios from "axios";
+import { ShopContext } from "../context/ShopContext";
+import { toast } from "react-toastify";
 
 const Contact = () => {
 	const [formData, setFormData] = useState({
@@ -40,7 +43,8 @@ const Contact = () => {
 		}
 	};
 
-	const handleSubmit = (e) => {
+	const { backendUrl } = useContext(ShopContext);
+	const handleSubmit = async (e) => {
 		e.preventDefault();
 		const errors = validateForm();
 
@@ -49,20 +53,26 @@ const Contact = () => {
 			return;
 		}
 
-		// Simulated form submission
-		console.log("Form submitted:", formData);
-		setIsSubmitted(true);
+		try {
+			const response = await axios.post(
+				backendUrl + "/api/contact/send-email",
+				formData
+			);
 
-		// Reset form after 3 seconds
-		setTimeout(() => {
-			setFormData({
-				name: "",
-				email: "",
-				phone: "",
-				comment: "",
-			});
-			setIsSubmitted(false);
-		}, 3000);
+			if (response.data.success) {
+				setIsSubmitted(true);
+				setTimeout(() => {
+					setFormData({ name: "", email: "", phone: "", comment: "" });
+					setIsSubmitted(false);
+				}, 2000);
+			} else {
+				console.error("Failed to send email:", response.data.message);
+				toast.error(response.data.message);
+			}
+		} catch (error) {
+			console.error("Error:", error);
+			toast.error(error.message);
+		}
 	};
 
 	return (
@@ -75,7 +85,7 @@ const Contact = () => {
 					</h2>
 					{isSubmitted ? (
 						<div className="bg-green-100 text-green-700 p-4 rounded-md">
-							Thank you! We'll get back to you soon.
+							Thank you! We&apos;ll get back to you soon.
 						</div>
 					) : (
 						<form onSubmit={handleSubmit} className="space-y-4 font-hubot">

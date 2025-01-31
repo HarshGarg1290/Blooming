@@ -90,7 +90,10 @@ const Footer = () => {
 					))}
 					<div className="flex items-start gap-3 text-gray-700">
 						<IoLocationOutline className="text-3xl mt-1 ml-[-2px]" />
-						<p>Plot no.1, Amer Road,<br/> Near Jal Mahal, Jaipur, Rajasthan 302002</p>
+						<p>
+							Plot no.1, Amer Road,
+							<br /> Near Jal Mahal, Jaipur, Rajasthan 302002
+						</p>
 					</div>
 				</motion.div>
 
@@ -111,7 +114,8 @@ const Footer = () => {
 								<motion.li
 									key={index}
 									whileHover={{ x: 10 }}
-									className="transition-all"
+									transition={{ duration: 0.4 }}
+									className="transition-all ease-out"
 								>
 									<a
 										href={link.href}

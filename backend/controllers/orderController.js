@@ -34,7 +34,7 @@ const placeOrderRazorPay = async (req, res) => {};
 
 const allOrders = async (req, res) => {
     try {
-         
+		let orders = await orderModel; 
     } catch (error) {
         
     }
