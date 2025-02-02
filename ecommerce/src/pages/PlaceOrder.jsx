@@ -12,11 +12,10 @@ const PlaceOrder = () => {
 		backendUrl,
 		token,
 		setCartItems,
-		
 	} = useContext(ShopContext);
 	const [cartData, setCartData] = useState([]);
 	const [method, setMethod] = useState("cod");
-	
+
 	const [formData, setFormData] = useState({
 		firstName: "",
 		lastName: "",
@@ -36,6 +35,37 @@ const PlaceOrder = () => {
 	};
 	const shippingFee = 50.0;
 
+	const initPay = (order) => {
+		const options = {
+			key: import.meta.env.VITE_RAZORPAY_KEY_ID,
+			amount: order.amount,
+			currency: order.currency,
+			name: "Order Payment",
+			desciption: "Order Payment",
+			order_id: order.id,
+			receipt: order.receipt,
+			handler: async (res) => {
+			
+				try {
+					const { data } = await axios.post(
+						backendUrl + "/api/order/verifyRazorpay",
+						res,
+						{ headers: { token } }
+					);
+					if (data.success) {
+						navigate("/orders");
+						setCartItems({});
+					}
+				} catch (error) {
+					console.log(error);
+					toast.error(error);
+				}
+			},
+		};
+
+		const rzp = new window.Razorpay(options);
+		rzp.open();
+	};
 	useEffect(() => {
 		const temp = [];
 		for (const items in cartItems) {
@@ -88,14 +118,11 @@ const PlaceOrder = () => {
 			}
 
 			let orderData = {
-				
 				user_details: formData,
 				items: orderItems,
 				amount: grandTotal,
-				phone:formData.phone,
-
+				phone: formData.phone,
 			};
-
 
 			switch (method) {
 				case "cod": {
@@ -112,13 +139,24 @@ const PlaceOrder = () => {
 					}
 					break;
 				}
+
+				case "razorpay": {
+					const responseRazorpay = await axios.post(
+						backendUrl + "/api/order/razorpay",
+						orderData,
+						{ headers: { token } }
+					);
+					if (responseRazorpay.data.success) {
+						initPay(responseRazorpay.data.order);
+					}
+					break;
+				}
 				default:
 					break;
 			}
 		} catch (error) {
 			console.log(error);
-			toast.error(error.message)
-			
+			toast.error(error.message);
 		}
 	};
 
@@ -263,7 +301,6 @@ const PlaceOrder = () => {
 						name="state"
 						value={formData.state}
 						className="border border-gray-300 rounded py-1.5 px-3.5 w-full text-gray-400"
-						
 						onChange={(e) => {
 							onChangeHandler(e);
 							e.target.classList.toggle("text-black", e.target.value !== "");
@@ -341,21 +378,11 @@ const PlaceOrder = () => {
 							<input
 								type="radio"
 								name="paymentMethod"
-								value="card"
-								checked={method === "card"}
-								onChange={() => setMethod("card")}
-							/>
-							<span>Credit/Debit Card</span>
-						</label>
-						<label className="flex items-center gap-2">
-							<input
-								type="radio"
-								name="paymentMethod"
 								value="upi"
-								checked={method === "upi"}
-								onChange={() => setMethod("upi")}
+								checked={method === "razorpay"}
+								onChange={() => setMethod("razorpay")}
 							/>
-							<span>Net Banking</span>
+							<span>RazorPay</span>
 						</label>
 						<label className="flex items-center gap-2">
 							<input
