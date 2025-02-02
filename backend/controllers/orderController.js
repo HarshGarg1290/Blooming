@@ -3,15 +3,14 @@ import userModel from "../models/userModel.js";
 
 const placeOrder = async (req, res) => {
 	try {
-		const { userId, items, amount, address, phone } = req.body;
-		console.log(userId);
+		const { userId, items, amount, user_details, phone } = req.body;
 
 		const orderData = {
 			userId,
 			items,
 			amount,
 			phone,
-			address,
+			user_details,
 			paymentMode: "COD",
 			payment: false,
 			date: Date.now(),
@@ -33,11 +32,13 @@ const placeOrder = async (req, res) => {
 const placeOrderRazorPay = async (req, res) => {};
 
 const allOrders = async (req, res) => {
-    try {
-		let orders = await orderModel; 
-    } catch (error) {
-        
-    }
+	try {
+		const orders = await orderModel.find({});
+		res.json({ success: true, orders });
+	} catch (error) {
+		console.log(error);
+		res.json({ success: false, message: error.message });
+	}
 };
 
 const userOrders = async (req, res) => {
@@ -51,6 +52,15 @@ const userOrders = async (req, res) => {
 	}
 };
 
-const updateStatus = async (req, res) => {};
+const updateStatus = async (req, res) => {
+	try {
+		const { orderId, status } = req.body;
+		await orderModel.findByIdAndUpdate(orderId, { status });
+		res.json({ success: true, message: "Status Updated" });
+	} catch (error) {
+		console.log(error);
+		res.json({ success: false, message: error.message });
+	}
+};
 
 export { placeOrder, placeOrderRazorPay, userOrders, allOrders, updateStatus };

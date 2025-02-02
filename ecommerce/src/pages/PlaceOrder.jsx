@@ -89,7 +89,7 @@ const PlaceOrder = () => {
 
 			let orderData = {
 				
-				address: formData,
+				user_details: formData,
 				items: orderItems,
 				amount: grandTotal,
 				phone:formData.phone,

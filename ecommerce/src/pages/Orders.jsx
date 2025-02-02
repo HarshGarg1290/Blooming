@@ -41,9 +41,10 @@ const Orders = () => {
 	const getStatusColor = (status) => {
 		const statusColors = {
 			"Order Placed": "bg-yellow-500",
+			'Shipped' : 'bg-blue-500',
 			"Out for Delivery": "bg-purple-500",
-			"Order Delivered": "bg-green-500",
-			Cancelled: "bg-red-500",
+			"Delivered": "bg-green-500",
+			"Cancelled": "bg-red-500",
 		};
 		return statusColors[status] || "bg-gray-500";
 	};
