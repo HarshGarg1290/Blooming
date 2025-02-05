@@ -17,7 +17,7 @@ const Hero = () => {
 			title: "Summer Breeze",
 			description:
 				"Light, fresh designs perfect for warm days and magical summer nights",
-			accent: "bg-purple-200",
+			accent: "bg-red-200",
 		},
 		{
 			id: 1,
@@ -37,7 +37,7 @@ const Hero = () => {
 			title: "Pure Beauty",
 			description:
 				"Thoughtfully designed pieces that bring out your natural confidence",
-			accent: "bg-violet-200",
+			accent: "bg-teal-200",
 		},
 	];
 
@@ -70,7 +70,7 @@ const Hero = () => {
 	};
 
 	return (
-		<div className="relative min-h-[590px] overflow-hidden bg-gradient-to-br from-white to-gray-50 sm:mt-[120px]">
+		<div className="relative min-h-full overflow-hidden bg-gradient-to-br from-white to-gray-50 sm:mt-[120px]">
 			{/* Animated Background Elements */}
 			<div className="absolute inset-0 w-full h-full">
 				<div
