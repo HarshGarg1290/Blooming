@@ -7,47 +7,15 @@ import { useNavigate } from "react-router-dom";
 
 const ShopContextProvider = (props) => {
 	const currency = "₹";
-	const delivery_fee = 10;
+
 	const backendUrl = import.meta.env.VITE_BACKEND_URL;
 	const [search, setSearch] = useState("");
 	const [showSearch, setShowSearch] = useState(false);
-	const [reviews, setReviews] = useState([]);
+
 	const [cartItems, setCartItems] = useState([]);
 	const [products, setProducts] = useState([]);
 	const [token, setToken] = useState("");
 	const navigate = useNavigate();
-
-	const fetchReviews = async (productId) => {
-		try {
-			const response = await fetch(`/api/reviews/${productId}`);
-			const data = await response.json();
-			setReviews(data);
-		} catch (error) {
-			console.error("Error fetching reviews:", error);
-		}
-	};
-
-	// Add a review to the backend and update the local state
-	const addReview = async (newReview) => {
-		try {
-			const response = await fetch("/api/reviews", {
-				method: "POST",
-				headers: {
-					"Content-Type": "application/json",
-				},
-				body: JSON.stringify(newReview),
-			});
-			if (response.ok) {
-				setReviews((prevReviews) => [...prevReviews, newReview]);
-				toast.success("Review submitted successfully!");
-			} else {
-				toast.error("Failed to submit review.");
-			}
-		} catch (error) {
-			console.error("Error adding review:", error);
-			toast.error("Error adding review.");
-		}
-	};
 
 	const addToCart = async (itemId, size) => {
 		if (!size) {
@@ -106,7 +74,7 @@ const ShopContextProvider = (props) => {
 				await axios.post(
 					backendUrl + "/api/cart/add",
 					{ itemId, size },
-					{ headers: {token } }
+					{ headers: { token } }
 				);
 			} catch (error) {
 				console.log(error);
@@ -114,8 +82,6 @@ const ShopContextProvider = (props) => {
 			}
 		}
 		setIsCartOpen(true);
-
-		
 	};
 
 	const [isCartOpen, setIsCartOpen] = useState(false);
@@ -140,11 +106,11 @@ const ShopContextProvider = (props) => {
 
 		if (token) {
 			try {
-			await axios.post(
-				backendUrl + "/api/cart/update",
-				{ itemId, size, quantity: newQuantity },
-				{ headers: { token } }
-			);
+				await axios.post(
+					backendUrl + "/api/cart/update",
+					{ itemId, size, quantity: newQuantity },
+					{ headers: { token } }
+				);
 			} catch (error) {
 				console.log(error);
 				toast.error(error.message);
@@ -169,24 +135,6 @@ const ShopContextProvider = (props) => {
 		return totalCount;
 	};
 
-	const getCartAmount = () => {
-		return cartData
-			.reduce((total, item) => {
-				const productData = products.find(
-					(product) => product._id === item._id
-				);
-
-				if (!productData) {
-					console.warn(`Product not found for item ID: ${item._id}`);
-					return total; // Skip this item
-				}
-
-				return total + productData.price * item.quantity;
-			}, 0)
-			.toFixed(2);
-	};
-
-
 	const getProductsData = async () => {
 		try {
 			const response = await axios.get(backendUrl + "/api/product/list");
@@ -204,15 +152,19 @@ const ShopContextProvider = (props) => {
 
 	const getUserCart = async (token) => {
 		try {
-			const response = await axios.post(backendUrl + '/api/cart/get', {}, { headers: { token } })
+			const response = await axios.post(
+				backendUrl + "/api/cart/get",
+				{},
+				{ headers: { token } }
+			);
 			if (response.data.success) {
-				setCartItems(response.data.cartData)
+				setCartItems(response.data.cartData);
 			}
 		} catch (error) {
 			console.log(error);
 			toast.error(error.message);
 		}
-	}
+	};
 
 	useEffect(() => {
 		getProductsData();
@@ -228,14 +180,13 @@ const ShopContextProvider = (props) => {
 	const value = {
 		products,
 		currency,
-		delivery_fee,
+
 		search,
 		setSearch,
 		showSearch,
 		setShowSearch,
 		setCartItems,
-		reviews,
-		addReview,
+
 		cartItems,
 		addToCart,
 		getCartCount,
@@ -246,7 +197,6 @@ const ShopContextProvider = (props) => {
 		backendUrl,
 		token,
 		setToken,
-		getCartAmount,
 	};
 
 	return (
