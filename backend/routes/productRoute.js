@@ -12,7 +12,7 @@ import adminAuth from "../middleware/adminAuth.js";
 
 const productRouter = express.Router();
 
-// Product routes
+
 productRouter.post(
 	"/add",adminAuth,
 	upload.fields([
@@ -27,8 +27,7 @@ productRouter.post("/remove", adminAuth, removeProduct);
 productRouter.post("/single", singleProduct);
 productRouter.get("/list", listProduct);
 
-// // Review routes
-// productRouter.post("/review/add", addReview); // Add review
-// productRouter.get("/reviews/:productId", getReviews); // Get reviews of a product
+
+
 
 export default productRouter;

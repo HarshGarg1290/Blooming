@@ -1,6 +1,7 @@
-import React, { useContext, useEffect, useState } from "react";
+import  { useContext, useEffect, useState } from "react";
 import { ShopContext } from "../context/ShopContext";
 import axios from "axios";
+import Title from "../components/Title";
 
 const Orders = () => {
 	const { backendUrl, token, currency } = useContext(ShopContext);
@@ -41,10 +42,10 @@ const Orders = () => {
 	const getStatusColor = (status) => {
 		const statusColors = {
 			"Order Placed": "bg-yellow-500",
-			'Shipped' : 'bg-blue-500',
+			Shipped: "bg-blue-500",
 			"Out for Delivery": "bg-purple-500",
-			"Delivered": "bg-green-500",
-			"Cancelled": "bg-red-500",
+			Delivered: "bg-green-500",
+			Cancelled: "bg-red-500",
 		};
 		return statusColors[status] || "bg-gray-500";
 	};
@@ -52,7 +53,11 @@ const Orders = () => {
 	return (
 		<div className="container mx-auto px-4 pt-8 sm:pt-24 pb-12">
 			<div className="mb-8">
-				<h1 className="text-3xl sm:text-4xl font-bold">My Orders</h1>
+				<div className="flex items-center gap-2 sm:gap-4 font-semibold text-xl sm:text-3xl">
+					<Title text1="YOUR " text2="ORDERS" />
+					<span className="hidden sm:block w-8 sm:w-12 sm:h-[3px] bg-[#000000] "></span>
+				</div>
+
 				<p className="text-sm sm:text-base text-gray-500 mt-2">
 					Track and manage your orders
 				</p>
@@ -84,7 +89,7 @@ const Orders = () => {
 										<div className="mt-2 flex flex-wrap gap-4">
 											<span className="px-3 py-1 bg-gray-100 rounded-full text-sm sm:text-base font-medium">
 												{currency}
-												{item.price}
+												{item.price * item.quantity}
 											</span>
 											<span className="text-sm sm:text-base text-gray-600">
 												Quantity: {item.quantity}

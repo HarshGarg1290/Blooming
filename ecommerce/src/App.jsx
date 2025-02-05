@@ -19,14 +19,19 @@ import ScrollToTop from "./components/ScrollToTop";
 
 const App = () => {
 	const { isCartOpen, toggleCart } = useContext(ShopContext);
+	const PageWrapper = ({ children }) => {
+		return (
+			<div className="px-4 sm:px-[5vw] md:px-[7vw] lg:px-[9vw]">{children}</div>
+		);
+	};
 
 	return (
 		<div className="relative">
-			<ScrollToTop/>
+			<ScrollToTop />
 			<ToastContainer />
 			<Navbar />
 
-			<div className="px-4 sm:px-[5vw] md:px-[7vw] lg-px-[9vw]">
+			<div className="">
 				.
 				<div className="mt-12 sm:mt-[88px]">
 					<Search />
@@ -39,14 +44,62 @@ const App = () => {
 				)}
 				<Cart isOpen={isCartOpen} onClose={toggleCart} />
 				<Routes>
-					<Route path="/" element={<Home />} />
-					<Route path="/collection" element={<Collection />} />
-
-					<Route path="/contact" element={<Contact />} />
-					<Route path="/product/:productId" element={<Product />} />
-					<Route path="/login" element={<Login />} />
-					<Route path="/orders" element={<Orders />} />
-					<Route path="/place-order" element={<PlaceOrder />} />
+					<Route
+						path="/"
+						element={
+						
+								<Home />
+						
+						}
+					/>
+					<Route
+						path="/collection"
+						element={
+							<PageWrapper>
+								<Collection />
+							</PageWrapper>
+						}
+					/>
+					<Route
+						path="/contact"
+						element={
+							<PageWrapper>
+								<Contact />
+							</PageWrapper>
+						}
+					/>
+					<Route
+						path="/product/:productId"
+						element={
+							<PageWrapper>
+								<Product />
+							</PageWrapper>
+						}
+					/>
+					<Route
+						path="/login"
+						element={
+							<PageWrapper>
+								<Login />
+							</PageWrapper>
+						}
+					/>
+					<Route
+						path="/orders"
+						element={
+							<PageWrapper>
+								<Orders />
+							</PageWrapper>
+						}
+					/>
+					<Route
+						path="/place-order"
+						element={
+							<PageWrapper>
+								<PlaceOrder />
+							</PageWrapper>
+						}
+					/>
 				</Routes>
 			</div>
 			<Footer />

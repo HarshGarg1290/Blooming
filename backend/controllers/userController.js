@@ -85,4 +85,46 @@ const adminLogin = async (req, res) => {
 	}
 };
 
-export { loginUser, registerUser, adminLogin };
+const saveDeliveryInfo = async (req, res) => {
+	try {
+		const { userId, deliveryDetails } = req.body;
+		const user = await userModel.findById(userId);
+		if (!user) {
+			return res.json({ success: false, message: "User not found" });
+		}
+
+		user.deliveryDetails = deliveryDetails;
+		await user.save();
+
+		res.json({ success: true, message: "Delivery details saved successfully" });
+	} catch (error) {
+		console.log(error);
+		res.json({ success: false, message: error.message });
+	}
+};
+
+const getDeliveryInfo = async (req, res) => {
+	try {
+		const { userId } = req.body;
+		const user = await userModel.findById(userId);
+		if (!user) {
+			return res.json({ success: false, message: "User not found" });
+		}
+		const deliveryDetails = await user.deliveryDetails;
+
+		
+
+		res.json({ success: true, deliveryDetails });
+	} catch (error) {
+		console.log(error);
+		res.json({ success: false, message: error.message });
+	}
+};
+
+export {
+	loginUser,
+	registerUser,
+	adminLogin,
+	saveDeliveryInfo,
+	getDeliveryInfo,
+};

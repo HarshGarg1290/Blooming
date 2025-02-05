@@ -4,6 +4,7 @@ export default {
 	content: ["./index.html", "./src/**/*.{js,ts,jsx,tsx}"], // Adjust paths as needed
 	theme: {
 		extend: {
+			
 			fontFamily: {
 				hubot: ['"Hubot Sans"', "sans-serif"], // Add Hubot Sans font
 				lugrasimo: ['"Lugrasimo"', "cursive"], // Add Lugrasimo font
