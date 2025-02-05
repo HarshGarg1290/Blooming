@@ -15,6 +15,10 @@ const PlaceOrder = () => {
 	} = useContext(ShopContext);
 	const [cartData, setCartData] = useState([]);
 	const [method, setMethod] = useState("cod");
+	const [saveInfo, setSaveInfo] = useState(false);
+	const [savedAddress, setSavedAddress] = useState(null);
+	const [useSaved, setUseSaved] = useState(false);
+	const [shippingFee, setShippingFee] = useState(80.0);
 
 	const [formData, setFormData] = useState({
 		firstName: "",
@@ -33,7 +37,64 @@ const PlaceOrder = () => {
 		const value = e.target.value;
 		setFormData((prevData) => ({ ...prevData, [name]: value }));
 	};
-	const shippingFee = 50.0;
+
+	useEffect(() => {
+		if (method === "razorpay") {
+			setShippingFee(0);
+		} else if (method === "cod") {
+			setShippingFee(80.0);
+		}
+	}, [method]);
+
+	useEffect(() => {
+		const fetchDeliveryInfo = async () => {
+			try {
+				const response = await axios.post(
+					backendUrl + "/api/user/saved",
+					{},
+					{ headers: { token } }
+				);
+
+				if (response.data.success) {
+					setSavedAddress(response.data.deliveryDetails);
+				}
+			} catch (error) {
+				console.log("Error fetching delivery details:", error);
+			}
+		};
+
+		if (token) {
+			fetchDeliveryInfo();
+		}
+	}, [backendUrl, token]);
+
+	useEffect(() => {
+		if (useSaved && savedAddress) {
+			setFormData({
+				firstName: savedAddress.firstName ?? "",
+				lastName: savedAddress.lastName ?? "",
+				email: savedAddress.email ?? "",
+				address: savedAddress.address ?? "",
+				apartment: savedAddress.apartment ?? "",
+				city: savedAddress.city ?? "",
+				state: savedAddress.state ?? "",
+				zip: savedAddress.zip ?? "",
+				phone: savedAddress.phone ?? "",
+			});
+		} else {
+			setFormData({
+				firstName: "",
+				lastName: "",
+				email: "",
+				address: "",
+				apartment: "",
+				city: "",
+				state: "",
+				zip: "",
+				phone: "",
+			});
+		}
+	}, [useSaved, savedAddress]);
 
 	const initPay = (order) => {
 		const options = {
@@ -45,7 +106,6 @@ const PlaceOrder = () => {
 			order_id: order.id,
 			receipt: order.receipt,
 			handler: async (res) => {
-			
 				try {
 					const { data } = await axios.post(
 						backendUrl + "/api/order/verifyRazorpay",
@@ -123,6 +183,17 @@ const PlaceOrder = () => {
 				amount: grandTotal,
 				phone: formData.phone,
 			};
+			if (saveInfo) {
+				await axios.post(
+					backendUrl + "/api/user/delivery",
+					{
+						deliveryDetails: formData,
+					},
+					{
+						headers: { token },
+					}
+				);
+			}
 
 			switch (method) {
 				case "cod": {
@@ -163,7 +234,7 @@ const PlaceOrder = () => {
 	return (
 		<form
 			onSubmit={handlePlaceOrder}
-			className="flex flex-col justify-between sm:flex-row  pt-24 sm:pt-14 min-h-[80vh] border-t"
+			className="flex flex-col justify-between sm:flex-row  pt-8 sm:pt-14 min-h-[80vh] border-t"
 		>
 			{/* Right side: Cart Summary (This should come first on mobile) */}
 			<div className="flex flex-col w-full sm:max-w-[480px] bg-gray-100 p-6 rounded-lg sm:order-2">
@@ -183,15 +254,15 @@ const PlaceOrder = () => {
 							if (!productData) return null;
 							return (
 								<div key={index} className="flex justify-between">
-									<div className="flex text-sm text-gray-700">
+									<div className="flex text-lg text-gray-700  m-3">
 										<img
-											className="w-10 h-15 object-cover rounded"
+											className="w-15 h-20 object-cover rounded mr-2 "
 											src={productData.image[0]}
 											alt={productData.name}
 										/>
 										{productData.name} - {item.size}
 									</div>
-									<div className="font-medium text-gray-900">
+									<div className="font-medium text-gray-900 m-3">
 										{currency}
 										{(productData.price * item.quantity).toFixed(2)}
 									</div>
@@ -202,7 +273,7 @@ const PlaceOrder = () => {
 				)}
 
 				{/* Total and Shipping Fee */}
-				<div className="mt-6 border-t pt-4">
+				<div className="mt-6 border-t pt-4 m-3">
 					<div className="flex justify-between text-gray-700">
 						<span>Total:</span>
 						<span className="font-bold">
@@ -229,10 +300,42 @@ const PlaceOrder = () => {
 
 			{/* Left side: Delivery Information */}
 			<div className="flex flex-col gap-4 w-full sm:max-w-[480px] sm:order-1">
-				<div className="flex items-center gap-2 font-hubot font-semibold text-lg sm:text-3xl my-3">
+				<div className="flex items-center gap-2 font-hubot font-semibold text-xl sm:text-3xl my-3 mt-10">
 					<Title text1={"DELIVERY  "} text2={"INFORMATION "} />
 					<span className="hidden sm:block w-8 sm:w-12 sm:h-[3px] bg-[#000000] "></span>
 				</div>
+
+				{savedAddress && (
+					<div className="bg-gray-100 p-4 rounded">
+						<label className="flex items-center gap-2">
+							<input
+								type="radio"
+								name="addressOption"
+								value="saved"
+								checked={useSaved}
+								onChange={() => setUseSaved(true)}
+							/>
+							<span>Use Saved Address</span>
+						</label>
+						<p className="text-sm text-gray-700 ml-6">
+							{savedAddress.firstName} {savedAddress.lastName},{" "}
+							{savedAddress.address}, {savedAddress.city}, {savedAddress.state},{" "}
+							{savedAddress.zip}, {savedAddress.phone}
+						</p>
+
+						<label className="flex items-center gap-2 mt-3">
+							<input
+								type="radio"
+								name="addressOption"
+								value="new"
+								checked={!useSaved}
+								onChange={() => setUseSaved(false)}
+							/>
+							<span>Enter New Address</span>
+						</label>
+					</div>
+				)}
+
 				{/* Form Fields */}
 				<div className="flex gap-3">
 					<input
@@ -367,6 +470,14 @@ const PlaceOrder = () => {
 					aria-label="Phone Number"
 					required
 				/>
+				<label className="flex items-center mt-4">
+					<input
+						type="checkbox"
+						checked={saveInfo}
+						onChange={() => setSaveInfo(!saveInfo)}
+					/>
+					<span className="ml-2">Save delivery details for future orders</span>
+				</label>
 
 				{/* Payment Methods */}
 				<div className="mt-7">
@@ -382,7 +493,7 @@ const PlaceOrder = () => {
 								checked={method === "razorpay"}
 								onChange={() => setMethod("razorpay")}
 							/>
-							<span>RazorPay</span>
+							<span>RazorPay (No shipping fee)</span>
 						</label>
 						<label className="flex items-center gap-2">
 							<input

@@ -235,7 +235,7 @@ const Hero = () => {
 				</div>
 			</div>
 
-			<style jsx>{`
+			<style jsx="true">{`
 				@import url("https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600&display=swap");
 
 				.font-display {

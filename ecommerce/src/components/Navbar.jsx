@@ -90,18 +90,7 @@ const Navbar = () => {
 							transition-all duration-300 
 							hover:scale-105"
 							>
-								{["My Profile"].map((item) => (
-									<p
-										key={item}
-										className="
-										cursor-pointer 
-										hover:text-[#5c2674] 
-										hover:translate-x-2 
-										transition-all duration-300"
-									>
-										{item}
-									</p>
-								))}
+								
 								<p
 									onClick={() => {
 										navigate("/orders");
