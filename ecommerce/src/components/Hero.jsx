@@ -70,7 +70,7 @@ const Hero = () => {
 	};
 
 	return (
-		<div className="relative min-h-full overflow-hidden bg-gradient-to-br from-white to-gray-50 sm:mt-[120px]">
+		<div className="relative min-h-screen overflow-hidden bg-gradient-to-br from-white to-gray-50 sm:mt-[120px]">
 			{/* Animated Background Elements */}
 			<div className="absolute inset-0 w-full h-full">
 				<div
