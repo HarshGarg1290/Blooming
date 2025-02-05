@@ -43,7 +43,7 @@ const Collection = () => {
 
  
 	return (
-		<div className="flex flex-col gap-1 sm:gap-10 pt-20 border-t mb-[100px] sm:mb-[200px] ">
+		<div className="flex flex-col gap-1 sm:gap-10 pt-10 sm:pt-20 border-t mb-[100px] sm:mb-[200px] ">
 			<div className="flex ">
 				<div className="w-full flex justify-between items-center gap-4 font-hubot text-xl sm:text-3xl mb-4">
 					<div className="flex items-center gap-2 sm:gap-4 font-semibold">
