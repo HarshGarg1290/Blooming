@@ -1,7 +1,7 @@
+import React from "react";
 import { FaInstagram, FaWhatsapp } from "react-icons/fa";
 import { IoLocationOutline, IoMailOpenOutline } from "react-icons/io5";
-import { motion } from "framer-motion";
-import React from "react";
+
 const Footer = () => {
 	const socialLinks = [
 		{
@@ -21,127 +21,71 @@ const Footer = () => {
 		},
 	];
 
-	const sections = [
-		{
-			title: "INFORMATION",
-			links: [
-				{ text: "About Us", href: "#about" },
-				{ text: "Business Enquiry", href: "#business" },
-				{ text: "Terms & Conditions", href: "#terms" },
-				{ text: "Terms of Service", href: "#tos" },
-				{ text: "Privacy Policy", href: "#privacy" },
-			],
-		},
-		{
-			title: "CUSTOMER SERVICE",
-			links: [
-				{ text: "Contact Us", href: "#contact-us" },
-				{ text: "Shipping & Delivery Policy", href: "#shipping" },
-				{ text: "Return & Exchange Policy", href: "#return" },
-				{ text: "Frequently Asked Questions", href: "#faq" },
-			],
-		},
-		{
-			title: "MY ACCOUNT",
-			links: [
-				{ text: "My Account", href: "#account" },
-				{ text: "Order History", href: "#orders" },
-				{ text: "Wish List", href: "#wishlist" },
-			],
-		},
-	];
-
 	return (
-		<motion.footer
-			initial={{ opacity: 0 }}
-			whileInView={{ opacity: 1 }}
-			transition={{ duration: 0.5 }}
-			className="bg-gradient-to-br from-purple-50 to-purple-100 
-				w-full border-t-4 border-[#773397] mt-[100px] 
-				shadow-2xl rounded-t-2xl overflow-hidden"
-		>
-			<div className="w-full grid grid-cols-1 md:grid-cols-4 gap-10 pt-10 px-5 md:px-20">
-				{/* Contact Section */}
-				<motion.div
-					initial={{ x: -50, opacity: 0 }}
-					whileInView={{ x: 0, opacity: 1 }}
-					transition={{ delay: 0.2, duration: 0.5 }}
-					className="flex flex-col gap-4 bg-white/50 p-6 rounded-xl shadow-md"
-				>
-					<h4 className="font-raleway tracking-wider font-bold text-lg text-[#773397] border-b-2 border-[#773397] pb-2">
-						CONTACT
-					</h4>
-					{socialLinks.map((item, index) => (
-						<motion.p
-							key={index}
-							whileHover={{ scale: 1.05 }}
-							className="flex items-center gap-3 text-gray-700 hover:text-[#773397] transition-all"
-						>
-							{React.cloneElement(item.icon, { className: "text-xl" })}
-							<a
-								href={item.link}
-								target="_blank"
-								rel="noopener noreferrer"
-								className="hover:underline"
-							>
-								{item.text}
-							</a>
-						</motion.p>
-					))}
-					<div className="flex items-start gap-3 text-gray-700">
-						<IoLocationOutline className="text-3xl mt-1 ml-[-2px]" />
-						<p>
-							Plot no.1, Amer Road,
-							<br /> Near Jal Mahal, Jaipur, Rajasthan 302002
+		<footer className="bg-gradient-to-br from-purple-50 to-purple-100 mt-24">
+			<div className="max-w-7xl mx-auto px-4 py-12">
+				<div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-12">
+					{/* Brand Section */}
+					<div className="space-y-4">
+						<h3 className="text-2xl font-semibold text-purple-900">Blooming</h3>
+						<p className="text-gray-600 max-w-xs">
+							Bringing elegance and beauty to every moment with our curated
+							collection of blooms.
 						</p>
 					</div>
-				</motion.div>
 
-				{/* Additional Sections */}
-				{sections.map((section, sectionIndex) => (
-					<motion.div
-						key={section.title}
-						initial={{ y: 50, opacity: 0 }}
-						whileInView={{ y: 0, opacity: 1 }}
-						transition={{ delay: 0.3 * (sectionIndex + 1), duration: 0.5 }}
-						className="flex flex-col gap-4 bg-white/50 p-6 rounded-xl shadow-md"
-					>
-						<h4 className="font-raleway tracking-wider font-bold text-lg text-[#773397] border-b-2 border-[#773397] pb-2">
-							{section.title}
-						</h4>
-						<ul className="space-y-3">
-							{section.links.map((link, index) => (
-								<motion.li
+					{/* Contact Section */}
+					<div className="space-y-4">
+						<h3 className="text-lg font-semibold text-purple-900 border-b-2 border-purple-300 pb-2 mb-4">
+							Get in Touch
+						</h3>
+						<div className="space-y-3">
+							{socialLinks.map((item, index) => (
+								<a
 									key={index}
-									whileHover={{ x: 10 }}
-									transition={{ duration: 0.4 }}
-									className="transition-all ease-out"
+									href={item.link}
+									target="_blank"
+									rel="noopener noreferrer"
+									className="flex items-center gap-3 text-gray-600 hover:text-purple-900 transition-colors duration-200 group"
 								>
-									<a
-										href={link.href}
-										className="text-sm text-gray-700 hover:text-[#773397] hover:underline"
-									>
-										{link.text}
-									</a>
-								</motion.li>
+									<span className="text-xl group-hover:scale-110 transition-transform duration-200">
+										{item.icon}
+									</span>
+									<span className="hover:underline">{item.text}</span>
+								</a>
 							))}
-						</ul>
-					</motion.div>
-				))}
+						</div>
+					</div>
+
+					{/* Location Section */}
+					<div className="space-y-4">
+						<h3 className="text-lg font-semibold text-purple-900 border-b-2 border-purple-300 pb-2 mb-4">
+							Visit Us
+						</h3>
+						<div className="flex items-start gap-3 text-gray-600">
+							<IoLocationOutline className="text-2xl flex-shrink-0 mt-1" />
+							<p className="leading-relaxed">
+								Plot no.1, Amer Road,
+								<br />
+								Near Jal Mahal, Jaipur,
+								<br />
+								Rajasthan 302002
+							</p>
+						</div>
+					</div>
+				</div>
 			</div>
 
 			{/* Copyright Section */}
-			<motion.div
-				initial={{ opacity: 0 }}
-				whileInView={{ opacity: 1 }}
-				transition={{ delay: 0.6, duration: 0.5 }}
-				className="bg-[#773397] text-white"
-			>
-				<p className="py-3 text-xs text-center w-full">
-					Copyright 2024 bloomingbyMuskanGarg - All Rights Reserved
-				</p>
-			</motion.div>
-		</motion.footer>
+			<div className="bg-purple-900">
+				<div className="max-w-7xl mx-auto px-4 py-4">
+					<p className="text-sm text-center text-white/90">
+						Copyright © {new Date().getFullYear()} Blooming by Muskan Garg - All
+						Rights Reserved
+					</p>
+				</div>
+			</div>
+		</footer>
 	);
 };
 
