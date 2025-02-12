@@ -74,10 +74,8 @@ const Hero = () => {
 			{/* Animated Background Elements */}
 			<div className="absolute inset-0 w-full h-full">
 				<div
-					className={`absolute hidden sm:block w-96 h-72 transition-all duration-1000 ease-in-out 
-            ${
-							slides[currentSlide].accent
-						} rounded-full -top-20 -left-20 blur-2xl opacity-60
+					className={`absolute hidden sm:block w-[600px] h-[600px] transition-all duration-1000 ease-in-out 
+            ${slides[currentSlide].accent}  left-64 opacity-10 rounded-xl blur-lg
             ${
 							isAnimating
 								? slideDirection === "next"
@@ -86,7 +84,7 @@ const Hero = () => {
 								: ""
 						}`}
 				/>
-				<div
+				{/* <div
 					className={`absolute w-96 h-72 transition-all duration-1000 ease-in-out 
             ${
 							slides[currentSlide].accent
@@ -98,21 +96,21 @@ const Hero = () => {
 									: "animate-roll-left"
 								: ""
 						}`}
-				/>
+				/> */}
 			</div>
 
 			<div className="relative container mx-auto px-4 py-8 flex flex-col lg:flex-row items-center ">
 				{/* Left Content Section */}
-				<div className="w-full lg:w-1/2 space-y-6 text-center lg:text-left z-10 sm:pl-[280px]">
-					<div className="space-y-2">
+				<div className="w-full lg:w-1/2 space-y-6 text-center lg:text-left z-10 sm:pl-[280px]  ">
+					<div className="space-y-2 ">
 						<p
-							className={`inline-block px-4 py-1 rounded-full text-sm tracking-wider uppercase bg-[#441752] text-white mb-4 font-sans
+							className={` inline-block px-4 py-1 rounded-full text-sm tracking-wider uppercase  bg-[#441752] text-white mb-4 font-sans
                 ${isAnimating ? "animate-fade-out" : "animate-fade-in"}`}
 						>
 							{slides[currentSlide].subtitle}
 						</p>
 						<h1
-							className={`text-5xl lg:text-8xl font-medium text-[#3d1a6e]  font-display 
+							className={`text-5xl lg:text-8xl  font-medium text-[#3d1a6e]  font-display 
                 ${
 									isAnimating
 										? slideDirection === "next"
@@ -192,7 +190,7 @@ const Hero = () => {
 							className={`absolute w-48 h-48 transition-all duration-1000 ease-in-out
                 ${
 									slides[currentSlide].accent
-								} rounded-lg -top-10 -left-10 opacity-50
+								} rounded-lg -top-10 -left-10 opacity-30
                 ${
 									isAnimating
 										? slideDirection === "next"
@@ -203,7 +201,7 @@ const Hero = () => {
 						/>
 						<div
 							className={`absolute w-48 h-48 transition-all duration-1000 ease-in-out
-                ${slides[currentSlide].accent} -bottom-16 -right-10 opacity-50
+                ${slides[currentSlide].accent} -bottom-16 -right-10 opacity-30
                 ${
 									isAnimating
 										? slideDirection === "next"
@@ -219,7 +217,7 @@ const Hero = () => {
 								className={`absolute inset-0 bg-gradient-to-tr from-${slides[currentSlide].accent} to-white opacity-5 transition-all duration-1000`}
 							/>
 							<img
-								className={`w-full h-full object-cover object-center transition-all duration-700
+								className={`w-full h-full object-cover object-center transition-all duration-900
                   ${
 										isAnimating
 											? slideDirection === "next"
