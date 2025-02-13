@@ -19,7 +19,29 @@ connectdb();
 connectCloudinary();
 
 app.use(express.json());
-app.use(cors());
+
+const allowedOrigins = [
+	"https://blooming-frontend.vercel.app",
+	"https://blooming-admin-phi.vercel.app",
+];
+
+app.use(
+	cors({
+		origin: function (origin, callback) {
+			if (!origin || allowedOrigins.includes(origin)) {
+				callback(null, true);
+			} else {
+				callback(new Error("CORS policy does not allow this origin"));
+			}
+		},
+		methods: "GET,POST,PUT,DELETE,OPTIONS",
+		credentials: true, // Allow cookies & authentication headers
+	})
+);
+app.options("*", cors()); 
+
+
+
 
 app.use("/api/user", userRouter);
 
