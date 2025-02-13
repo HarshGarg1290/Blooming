@@ -23,6 +23,8 @@ app.use(express.json());
 const allowedOrigins = [
 	"https://blooming-frontend.vercel.app",
 	"https://blooming-admin-phi.vercel.app",
+	"http://localhost:5174",
+	"http://localhost:5173",
 ];
 
 app.use(

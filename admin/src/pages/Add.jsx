@@ -12,26 +12,50 @@ const Add = ({ token }) => {
 		sizes: [],
 		features: [],
 		washCare: [],
-	
 	});
 	const [images, setImages] = useState([]);
+	const [uploading, setUploading] = useState(false);
 
 	const handleInputChange = (e) => {
 		const { name, value } = e.target;
 		setFormData((prev) => ({ ...prev, [name]: value }));
 	};
 
-	const handleImageUpload = (e) => {
+	const handleImageUpload = async (e) => {
 		const files = Array.from(e.target.files);
-		const imagePreviews = files.map((file) => ({
-			file,
-			preview: URL.createObjectURL(file),
-		}));
+		setUploading(true);
 
-		setImages((prev) => [...prev, ...imagePreviews]);
+		const uploadedImages = await Promise.all(
+			files.map(async (file) => {
+				const formData = new FormData();
+				formData.append("file", file);
+				formData.append("upload_preset", "product"); // Replace with your preset
+
+				try {
+					const response = await fetch(
+						"https://api.cloudinary.com/v1_1/dufctt2le/image/upload",
+						{
+							method: "POST",
+							body: formData,
+						}
+					);
+					const data = await response.json();
+					return data.secure_url; // Cloudinary URL
+				} catch (error) {
+					console.error("Upload failed", error);
+					return null;
+				}
+			})
+		);
+
+		// Filter out failed uploads and update state
+		setImages((prev) => [...prev, ...uploadedImages.filter((url) => url)]);
+		setUploading(false);
 	};
 
-
+	const handleRemoveImage = (index) => {
+		setImages((prev) => prev.filter((_, i) => i !== index));
+	};
 	const toggleSize = (size) => {
 		setFormData((prev) => {
 			const sizes = prev.sizes.includes(size)
@@ -49,27 +73,25 @@ const Add = ({ token }) => {
 	};
 
 	const handleSubmit = async (e) => {
-		e.preventDefault(); // Prevent form from reloading the page
+		e.preventDefault();
 
-		const formDataToSend = new FormData();
-		formDataToSend.append("name", formData.name);
-		formDataToSend.append("description", formData.description);
-		formDataToSend.append("price", formData.price);
-		formDataToSend.append("sizes", JSON.stringify(formData.sizes));
-		formDataToSend.append("features", JSON.stringify(formData.features));
-		formDataToSend.append("washCare", JSON.stringify(formData.washCare));
-
-		images.forEach(({ file }, index) => {
-			formDataToSend.append(`image${index + 1}`, file);
-		});
+		const productData = {
+			name: formData.name,
+			description: formData.description,
+			price: formData.price,
+			sizes: formData.sizes,
+			features: formData.features,
+			washCare: formData.washCare,
+			images, // Now this contains Cloudinary URLs
+		};
 
 		try {
 			const response = await axios.post(
 				`${backendUrl}/api/product/add`,
-				formDataToSend,
+				productData,
 				{
 					headers: {
-						"Content-Type": "multipart/form-data",
+						"Content-Type": "application/json",
 						token,
 					},
 				}
@@ -77,8 +99,6 @@ const Add = ({ token }) => {
 
 			if (response.data.success) {
 				toast.success(response.data.message);
-
-				// Reset the form state
 				setFormData({
 					name: "",
 					description: "",
@@ -109,13 +129,26 @@ const Add = ({ token }) => {
 						<img className="w-20 sm:w-20" src={assets.upload_area} alt="" />
 						<input type="file" multiple onChange={handleImageUpload} hidden />
 					</label>
+					{uploading && (
+						<div className="w-20 h-20 flex items-center justify-center">
+							<div className="w-10 h-10 border-4 border-gray-300 border-t-black rounded-full animate-spin"></div>
+						</div>
+					)}
 					{images.map((image, index) => (
-						<img
-							key={index}
-							className="w-20 h-20 object-cover flex "
-							src={image.preview}
-							alt={`Uploaded ${index}`}
-						/>
+						<div key={index} className="relative w-20 h-20">
+							<img
+								key={index}
+								className="w-20 h-20 object-cover flex "
+								src={image}
+								alt={`Uploaded ${index}`}
+							/>
+							<button
+								className="absolute top-0 right-0 bg-black text-white text-xs p-1 rounded-full"
+								onClick={() => handleRemoveImage(index)}
+							>
+								X
+							</button>
+						</div>
 					))}
 				</div>
 			</div>
