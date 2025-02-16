@@ -22,12 +22,12 @@ const Footer = () => {
 	];
 
 	return (
-		<footer className="bg-gradient-to-br from-purple-50 to-purple-100 mt-24">
+		<footer className="bg-gradient-to-br from-purple-50 to-purple-100 mt-24 font-mono">
 			<div className="max-w-7xl mx-auto px-4 py-12">
-				<div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-12">
+				<div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-12 ">
 					{/* Brand Section */}
-					<div className="space-y-4">
-						<h3 className="text-2xl font-semibold text-purple-900">Blooming</h3>
+					<div className="space-y-4 ">
+						<h3 className="text-2xl font-semibold text-purple-900">blooMinG</h3>
 						<p className="text-gray-600 max-w-xs">
 							Bringing elegance and beauty to every moment with our curated
 							collection of blooms.
