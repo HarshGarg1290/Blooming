@@ -16,7 +16,7 @@ const BestSeller = () => {
   }, [products]);
 
   return (
-		<section className="my-16 px-4">
+		<section className="mt-10 px-4">
 			{/* Title Section */}
 			<div
 				className="text-center text-3xl"

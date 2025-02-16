@@ -70,12 +70,14 @@ const Hero = () => {
 	};
 
 	return (
-		<div className="relative min-h-screen overflow-hidden bg-gradient-to-br from-white to-gray-50 sm:mt-[120px]">
+		<div className="relative min-h-screen overflow-hidden bg-gradient-to-br from-white to-gray-50 sm:mt-[120px] ">
 			{/* Animated Background Elements */}
 			<div className="absolute inset-0 w-full h-full">
 				<div
 					className={`absolute hidden sm:block w-[600px] h-[600px] transition-all duration-1000 ease-in-out 
-            ${slides[currentSlide].accent}  left-64 opacity-10 rounded-xl blur-lg
+            ${
+							slides[currentSlide].accent
+						}  left-64 opacity-10 rounded-xl blur-lg
             ${
 							isAnimating
 								? slideDirection === "next"
@@ -84,27 +86,14 @@ const Hero = () => {
 								: ""
 						}`}
 				/>
-				{/* <div
-					className={`absolute w-96 h-72 transition-all duration-1000 ease-in-out 
-            ${
-							slides[currentSlide].accent
-						} rounded-full -bottom-20 -right-20 blur-2xl opacity-60
-            ${
-							isAnimating
-								? slideDirection === "next"
-									? "animate-roll-right"
-									: "animate-roll-left"
-								: ""
-						}`}
-				/> */}
 			</div>
 
 			<div className="relative container mx-auto px-4 py-8 flex flex-col lg:flex-row items-center ">
 				{/* Left Content Section */}
-				<div className="w-full lg:w-1/2 space-y-6 text-center lg:text-left z-10 sm:pl-[280px]  ">
-					<div className="space-y-2 ">
+				<div className="   w-full sm:relative lg:w-1/2 space-y-6 text-center lg:text-left z-10 sm:pl-[280px]  ">
+					<div className=" space-y-2 ">
 						<p
-							className={` inline-block px-4 py-1 rounded-full text-sm tracking-wider uppercase  bg-[#441752] text-white mb-4 font-sans
+							className={`hidden sm:inline-block px-4 py-1 rounded-full text-sm tracking-wider uppercase  bg-[#441752] text-white mb-4 font-sans
                 ${isAnimating ? "animate-fade-out" : "animate-fade-in"}`}
 						>
 							{slides[currentSlide].subtitle}
@@ -122,14 +111,14 @@ const Hero = () => {
 							{slides[currentSlide].title}
 						</h1>
 						<p
-							className={`text-gray-600 text-xl mt-6 max-w-lg mx-auto lg:mx-0 font-light tracking-wide font-sans
+							className={`px-3 sm:px-0 text-gray-600 text-xl mt-6 max-w-lg mx-auto lg:mx-0 font-light tracking-wide font-sans
                 ${isAnimating ? "animate-fade-out" : "animate-fade-in"}`}
 						>
 							{slides[currentSlide].description}
 						</p>
 					</div>
 
-					<div className="flex flex-col sm:flex-row items-center gap-4 justify-center lg:justify-start">
+					<div className="   flex flex-col sm:flex-row items-center gap-4 justify-center lg:justify-start">
 						<Link to="/collection">
 							<button className="group flex items-center gap-2 py-4 px-8 bg-purple-900 text-white font-medium tracking-wide rounded-full hover:bg-gray-800 transition-all duration-500 transform hover:scale-105 hover:shadow-xl">
 								Explore Collection
@@ -140,7 +129,7 @@ const Hero = () => {
 							</button>
 						</Link>
 
-						<div className="flex items-center gap-4">
+						<div className=" hidden sm:flex items-center gap-4  ">
 							<button
 								onClick={handlePrevSlide}
 								className="p-3 rounded-full border-2 border-gray-300 hover:bg-gray-100 transition-all duration-300 hover:border-gray-900"
@@ -159,7 +148,7 @@ const Hero = () => {
 					</div>
 
 					{/* Slide Indicators */}
-					<div className="flex justify-center lg:justify-start gap-3 mt-8">
+					<div className="relative top-[530px] flex justify-center lg:justify-start gap-3 mt-8 z-20">
 						{slides.map((_, index) => (
 							<button
 								key={index}
@@ -183,7 +172,7 @@ const Hero = () => {
 				</div>
 
 				{/* Right Image Section */}
-				<div className="w-full lg:w-1/2 mt-8 lg:mt-0 relative">
+				<div className="w-full lg:w-1/2  lg:mt-0 relative">
 					<div className="relative mx-auto w-[300px] h-[500px]">
 						{/* Animated Decorative Elements */}
 						<div
@@ -211,7 +200,6 @@ const Hero = () => {
 								}`}
 						/>
 
-						{/* Main Image Container */}
 						<div className="relative overflow-hidden w-full h-full rounded-2xl shadow-xl ">
 							<div
 								className={`absolute inset-0 bg-gradient-to-tr from-${slides[currentSlide].accent} to-white opacity-5 transition-all duration-1000`}
