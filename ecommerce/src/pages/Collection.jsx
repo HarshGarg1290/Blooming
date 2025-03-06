@@ -69,7 +69,7 @@ const Collection = () => {
 							data-aos="zoom-in-up"
 							data-aos-duration="600"
 							data-aos-delay={index * 100}
-							className="border-2  border-[#86589d] border-opacity-25"
+							className="border-2  border-[#3c3b3c] border-opacity-10"
 						>
 							<ProductItem
 								id={item._id}
