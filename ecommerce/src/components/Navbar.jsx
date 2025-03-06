@@ -104,11 +104,10 @@ const Navbar = () => {
 								group-hover:-rotate-12
 								transition-transform duration-300"
 						/>
-						{token && (
-							<p className="text-gray-800 font-semibold hidden sm:block">
-								Hey, {userName || "User"}!
-							</p>
-						)}
+
+						<p className="text-gray-800 font-semibold hidden sm:block">
+							Hey, {token ? userName  : "User"}!
+						</p>
 					</div>
 
 					{token && (
