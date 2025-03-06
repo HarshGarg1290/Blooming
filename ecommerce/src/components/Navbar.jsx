@@ -90,10 +90,10 @@ const Navbar = () => {
 					hover:drop-shadow-lg transition-all duration-300 sm:pb-5"
 				/>
 			</Link>
-			<div className="w-full  flex justify-end sm:justify-between">
+			<div className="w-full  flex  justify-end  sm:justify-between">
 				{/* Profile Dropdown with Enhanced Interactions */}
-				<div className="group relative mr-5 sm:-mr-[5px]">
-					<div className="flex flex-row gap-4">
+				<div className="group relative  ">
+					<div className="flex flex-row gap-4 mr-5 sm:mr-0">
 						<img
 							onClick={() => {
 								token ? null : navigate("/login");
@@ -102,11 +102,11 @@ const Navbar = () => {
 							alt=""
 							className="w-5 cursor-pointer 
 								group-hover:-rotate-12
-								transition-transform duration-300"
+								transition-transform duration-300 "
 						/>
 
-						<p className="text-gray-800 font-semibold hidden sm:block">
-							Hey, {token ? userName  : "User"}!
+						<p className="text-gray-800 font-semibold hidden sm:block w-[130px] truncate overflow-hidden whitespace-nowrap">
+							Hey, {token ? userName : "User"}!
 						</p>
 					</div>
 
