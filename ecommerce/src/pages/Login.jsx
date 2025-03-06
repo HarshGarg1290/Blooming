@@ -2,11 +2,14 @@ import { useContext, useEffect, useState } from "react";
 import { ShopContext } from "../context/ShopContext";
 import axios from "axios";
 import { toast } from "react-toastify";
+import { useLocation } from "react-router-dom";
+
 const Login = () => {
 	const [currentState, setcurrentState] = useState("Login");
 	const [name, setName] = useState("");
 	const [email, setEmail] = useState("");
 	const [password, setPassword] = useState("");
+	const location = useLocation();
 
 	const { token, setToken, navigate, backendUrl } = useContext(ShopContext);
 	const onSubmitHandler = async (e) => {
@@ -30,29 +33,27 @@ const Login = () => {
 					password,
 				});
 
-				if (response.data.success) { 
+				if (response.data.success) {
 					setToken(response.data.token);
 					localStorage.setItem("token", response.data.token);
-				}
-				else {
-					
-					
+				} else {
 					toast.error(response.data.message);
 				}
-				
 			}
 		} catch (error) {
 			console.log(error);
 			toast.error(error.message);
 		}
-
-		
 	};
+
 	useEffect(() => {
 		if (token) {
-			navigate("/");
+			// Check if there's a redirectTo path in the location state
+			const redirectPath = location.state?.redirectTo || "/";
+			navigate(redirectPath);
 		}
-	}, [token,navigate]);
+	}, [token, navigate, location]);
+
 	return (
 		<form
 			onSubmit={onSubmitHandler}

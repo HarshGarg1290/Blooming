@@ -305,7 +305,7 @@ const PlaceOrder = () => {
 					<span className="hidden sm:block w-8 sm:w-12 sm:h-[3px] bg-[#000000] "></span>
 				</div>
 
-				{savedAddress && (
+				{savedAddress && Object.values(savedAddress).some((value) => value) && (
 					<div className="bg-gray-100 p-4 rounded">
 						<label className="flex items-center gap-2">
 							<input
@@ -318,9 +318,12 @@ const PlaceOrder = () => {
 							<span>Use Saved Address</span>
 						</label>
 						<p className="text-sm text-gray-700 ml-6">
-							{savedAddress.firstName} {savedAddress.lastName},{" "}
-							{savedAddress.address}, {savedAddress.city}, {savedAddress.state},{" "}
-							{savedAddress.zip}, {savedAddress.phone}
+							{savedAddress.firstName || ""} {savedAddress.lastName || ""}
+							{savedAddress.address ? `, ${savedAddress.address}` : ""}
+							{savedAddress.city ? `, ${savedAddress.city}` : ""}
+							{savedAddress.state ? `, ${savedAddress.state}` : ""}
+							{savedAddress.zip ? `, ${savedAddress.zip}` : ""}
+							{savedAddress.phone ? `, ${savedAddress.phone}` : ""}
 						</p>
 
 						<label className="flex items-center gap-2 mt-3">

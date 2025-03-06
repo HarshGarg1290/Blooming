@@ -4,7 +4,7 @@ import Title from "../components/Title";
 import { X } from "lucide-react";
 
 const Cart = ({ isOpen, onClose }) => {
-	const { products, currency, cartItems, updateCartQuantity, navigate } =
+	const { products, currency, cartItems, updateCartQuantity, navigate ,token} =
 		useContext(ShopContext);
 	const [cartData, setCartData] = useState([]);
 
@@ -178,8 +178,16 @@ const Cart = ({ isOpen, onClose }) => {
 						<div className="flex items-center justify-center">
 							<button
 								onClick={() => {
-									navigate("/place-order");
-									onClose();
+										if (!token) {
+											onClose();
+										navigate("/login", {
+											state: { redirectTo: "/place-order" },
+										});
+									} else {
+
+										navigate("/place-order");
+										onClose();
+									}
 								}}
 								className="w-auto bg-[#E6E6FA] text-black py-2 px-3 rounded-full hover:bg-gray-800 transition hover:text-[#E6E6FA]"
 							>

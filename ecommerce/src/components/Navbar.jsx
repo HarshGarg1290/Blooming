@@ -2,11 +2,12 @@ import { useContext, useEffect, useState } from "react";
 import { assets } from "../assets/assets";
 import { Link, NavLink } from "react-router-dom";
 import { ShopContext } from "../context/ShopContext";
-
+import axios from "axios";
+import { toast } from "react-toastify";
 const Navbar = () => {
 	const [visible, setVisible] = useState(false);
-	const [scrolled, setScrolled] = useState(false); 
-
+	const [scrolled, setScrolled] = useState(false);
+	const [userName, setUserName] = useState("");
 	useEffect(() => {
 		const handleScroll = () => {
 			if (window.scrollY > 50) {
@@ -31,7 +32,31 @@ const Navbar = () => {
 		token,
 		setToken,
 		setCartItems,
+		backendUrl,
 	} = useContext(ShopContext);
+
+	const fetchUserName = async () => {
+		if (!token) return;
+		try {
+			const response = await axios.post(
+				backendUrl + "/api/user/details",
+				{ userId: localStorage.getItem("userId") },
+				{ headers: { token } }
+			);
+			if (response.data.success) {
+				setUserName(response.data.userName);
+			} else {
+				console.log("Error:", response.data.message);
+			}
+		} catch (error) {
+			console.log(error);
+			toast.error(error.message);
+		}
+	};
+
+	useEffect(() => {
+		fetchUserName();
+	}, [token]);
 
 	const handleSearchClick = () => {
 		navigate("/collection");
@@ -67,17 +92,24 @@ const Navbar = () => {
 			</Link>
 			<div className="w-full  flex justify-end sm:justify-between">
 				{/* Profile Dropdown with Enhanced Interactions */}
-				<div className="group relative mr-5 sm:mr-[150px]">
-					<img
-						onClick={() => {
-							token ? null : navigate("/login");
-						}}
-						src={assets.profile_icon}
-						alt=""
-						className="w-5 cursor-pointer 
+				<div className="group relative mr-5 sm:-mr-[5px]">
+					<div className="flex flex-row gap-4">
+						<img
+							onClick={() => {
+								token ? null : navigate("/login");
+							}}
+							src={assets.profile_icon}
+							alt=""
+							className="w-5 cursor-pointer 
 								group-hover:-rotate-12
 								transition-transform duration-300"
-					/>
+						/>
+						{token && (
+							<p className="text-gray-800 font-semibold hidden sm:block">
+								Hey, {userName || "User"}!
+							</p>
+						)}
+					</div>
 
 					{token && (
 						<div className="group-hover:block hidden absolute dropdown-menu left-0 pt-4 z-20">
@@ -90,7 +122,11 @@ const Navbar = () => {
 							transition-all duration-300 
 							hover:scale-105"
 							>
-								
+								{token && (
+									<p className="text-gray-800 font-semibold block sm:hidden">
+										{userName || "User"}
+									</p>
+								)}
 								<p
 									onClick={() => {
 										navigate("/orders");

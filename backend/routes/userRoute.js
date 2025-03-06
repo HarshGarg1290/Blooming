@@ -1,11 +1,12 @@
 import express from 'express'
 
 
-import { loginUser, registerUser, adminLogin, saveDeliveryInfo, getDeliveryInfo  } from '../controllers/userController.js'
+import { loginUser, registerUser, adminLogin, saveDeliveryInfo, getDeliveryInfo, getUserDetails  } from '../controllers/userController.js'
 import authUser from '../middleware/auth.js';
 
 const userRouter = express.Router();
 
+userRouter.post('/details',authUser, getUserDetails);
 userRouter.post('/register', registerUser);
 userRouter.post('/login', loginUser);
 userRouter.post('/admin', adminLogin);
