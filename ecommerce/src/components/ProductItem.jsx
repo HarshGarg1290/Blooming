@@ -16,7 +16,7 @@ const ProductItem = ({ id, image, name, price }) => {
 					/>
 				</div>
 				<div className="text-center font-hubot">
-					<p className="text-sm sm:text-base">{name}</p>
+					<p className="text-sm sm:text-base italic">{name}</p>
 					<p className="text-sm font-medium">
 						{currency}
 						{price}
