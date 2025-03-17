@@ -118,7 +118,6 @@ const Product = () => {
 											<li>Free shipping on all orders.</li>
 											<li>
 												Standard shipping takes 5-7 business days.
-												<br />
 												Charges applicable in case of express shipping
 												(subjective to availability )
 											</li>

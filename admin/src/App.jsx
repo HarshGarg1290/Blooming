@@ -32,6 +32,7 @@ const App = () => {
 				<>
 					<Navbar setToken={setToken} />
 					<hr />
+					<div className="w-100% text-center text-2xl p-4">WELCOME TO THE ADMIN PANEL</div>
 					<div className="flex w-full">
 						<Sidebar />
 
