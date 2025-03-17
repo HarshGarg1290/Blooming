@@ -22,7 +22,7 @@ const Footer = () => {
 	];
 
 	return (
-		<footer className="bg-gradient-to-br from-purple-50 to-purple-100 mt-24 font-mono">
+		<footer className="bg-gradient-to-br from-violet-100 to-purple-200 mt-24 font-mono">
 			<div className="max-w-7xl mx-auto px-4 py-12">
 				<div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-12 ">
 					{/* Brand Section */}
