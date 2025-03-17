@@ -27,7 +27,6 @@ const addProduct = async (req, res) => {
 	}
 };
 
-
 const removeProduct = async (req, res) => {
 	try {
 		await productModel.findByIdAndDelete(req.body.id);
@@ -51,16 +50,50 @@ const listProduct = async (req, res) => {
 
 const singleProduct = async (req, res) => {
 	try {
-		const { productId } = req.body
-		const product = await productModel.findById(productId)
+		const { productId } = req.body;
+		const product = await productModel.findById(productId);
 
-		res.json({success:true,product})
+		res.json({ success: true, product });
 	} catch (error) {
 		console.log(error);
-		
+
 		res.json({ success: false, message: error.message });
 	}
-
 };
 
-export { addProduct, listProduct, removeProduct, singleProduct };
+const updateProduct = async (req, res) => {
+	try {
+		const { id, name, description, price, sizes, features, washCare, images } =
+			req.body;
+
+		const updatedProduct = await productModel.findByIdAndUpdate(
+			id,
+			{
+				name,
+				description,
+				price: Number(price),
+				sizes,
+				features,
+				washCare,
+				image: images, // Updated Cloudinary URLs
+			},
+			{ new: true }
+		);
+
+		if (!updatedProduct) {
+			return res.json({ success: false, message: "Product not found" });
+		}
+
+		res.json({
+			success: true,
+			message: "Product updated successfully",
+			product: updatedProduct,
+		});
+	} catch (error) {
+		console.log(error);
+		res.json({ success: false, message: error.message });
+	}
+};
+
+
+export { addProduct, listProduct, removeProduct, singleProduct ,updateProduct };

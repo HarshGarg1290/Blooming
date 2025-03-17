@@ -115,14 +115,21 @@ const Product = () => {
 									title: "SHIPPING & EXCHANGE POLICY",
 									content: (
 										<ul className="list-disc list-inside">
-											<li>Free shipping on all orders over $50.</li>
-											<li>Standard shipping takes 5-7 business days.</li>
-											<li>Expedited shipping options available at checkout.</li>
+											<li>Free shipping on all orders.</li>
 											<li>
-												30-day return policy for unworn and unwashed items.
+												Standard shipping takes 5-7 business days.
+												<br />
+												Charges applicable in case of express shipping
+												(subjective to availability )
 											</li>
 											<li>
-												Exchange requests are processed within 7 business days.
+												3 day return policy on products with original tags
+												intact.
+											</li>
+				
+											<li>
+												Exchange and refund requests are
+												processed within 7 days.
 											</li>
 										</ul>
 									),

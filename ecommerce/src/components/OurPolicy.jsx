@@ -8,7 +8,7 @@ const OurPolicy = () => {
 			<div className="flex flex-col sm:flex-row justify-around gap-12 sm:gap-5 text-center py-20 text-xs sm:text-sm md:text-base text-gray-700  ">
 				<div className="font-raleway">
 					<img src={assets.exchange_icon} alt="" className="w-24 m-auto mb-1" />
-					<p className="font-semibold ">EASY EXCHANGE POLICY</p>
+					<p className="font-semibold ">EASY RETURN AND EXCHANGE POLICY</p>
 					<p>
 						We provide a seamless and stress-free exchange process. <br />
 						<span className="text-xs"> Terms and Condition applied</span>
