@@ -73,7 +73,7 @@ const Navbar = () => {
 	return (
 		<div
 			className={`fixed w-full font-hubot flex flex-row sm:flex-col items-center justify-between font-medium 
-			bg-gradient-to-r from-violet-200 to-purple-100 
+			bg-gradient-to-r from-violet-300 to-violet-200
 			py-4 px-4 sm:px-8 z-40 shadow-md 
 			transition-all duration-500 ${
 				scrolled ? "sm:translate-y-[-90px]" : "sm:translate-y-0"
