@@ -36,7 +36,7 @@ const App = () => {
 
 			<div className="">
 				.
-				<div className="mt-12 sm:mt-[130px]">
+				<div className="mt-16 sm:mt-[130px]">
 					<Search />
 				</div>
 				{isCartOpen && (
