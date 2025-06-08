@@ -119,7 +119,7 @@ const Navbar = () => {
 				</ul>
 
 				<div className="flex items-center gap-4">
-					<div className="group relative  ">
+					
 						<div className="flex flex-row gap-4 ">
 							<p className="text-gray-800 font-semibold hidden sm:block w-[130px] truncate overflow-hidden whitespace-nowrap">
 								Hey, {token ? userName : "User"}!
@@ -177,7 +177,7 @@ const Navbar = () => {
 								</div>
 							</div>
 						)}
-					</div>
+				
 					<img
 						onClick={handleSearchClick}
 						src={assets.search_icon}
