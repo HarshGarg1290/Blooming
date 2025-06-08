@@ -4,7 +4,7 @@ const About = () => {
 			<img
 				src="about.jpg"
 				alt="About Us"
-				className=" object-cover w-[75%]"
+				className=" object-cover sm:w-[75%] mt-10 sm:mt-0 "
 				onError={(e) => {
 					e.target.style.display = "none";
 					console.log("Image failed to load");
