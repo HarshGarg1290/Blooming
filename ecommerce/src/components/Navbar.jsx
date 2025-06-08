@@ -120,7 +120,7 @@ const Navbar = () => {
 
 				<div className="flex items-center gap-4">
 					
-						<div className="flex flex-row gap-4 items-center min-w-[40px]">
+						<div className="sm:flex flex-row sm:gap-4 items-center ">
 							<p className="text-gray-800 font-semibold hidden sm:block w-[130px] truncate overflow-hidden whitespace-nowrap">
 								Hey, {token ? userName : "User"}!
 							</p>
