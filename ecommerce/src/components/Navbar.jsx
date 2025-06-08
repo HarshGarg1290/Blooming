@@ -120,8 +120,8 @@ const Navbar = () => {
 
 				<div className="flex items-center gap-4">
 					<div className="group relative  ">
-						<div className="flex flex-row gap-4 items-center min-w-[20px] ">
-							<p className="text-gray-800 font-semibold hidden sm:block w-[130px] truncate overflow-hidden whitespace-nowrap">
+						<div className="flex flex-row gap-4  items-center w-auto">
+							<p className="text-gray-800 font-semibold hidden sm:block truncate overflow-hidden whitespace-nowrap">
 								Hey, {token ? userName : "User"}!
 							</p>
 							<img
