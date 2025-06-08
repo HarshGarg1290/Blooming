@@ -18,6 +18,7 @@ import "react-toastify/dist/ReactToastify.css";
 import ScrollToTop from "./components/ScrollToTop";
 import LogoAnimation from "./pages/Loading";
 import About from "./pages/About";
+import ResetPassword from "./pages/ResetPassword";
 
 const App = () => {
 	const { isCartOpen, toggleCart } = useContext(ShopContext);
@@ -85,6 +86,14 @@ const App = () => {
 						element={
 							<PageWrapper>
 								<Login />
+							</PageWrapper>
+						}
+					/>
+					<Route
+						path="/reset-password/:token"
+						element={
+							<PageWrapper>
+								<ResetPassword />
 							</PageWrapper>
 						}
 					/>

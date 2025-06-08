@@ -37,7 +37,7 @@ app.use(
 			}
 		},
 		methods: "GET,POST,PUT,DELETE,OPTIONS",
-		credentials: true, // Allow cookies & authentication headers
+		credentials: true, 
 	})
 );
 app.options("*", cors()); 

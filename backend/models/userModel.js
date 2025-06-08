@@ -17,6 +17,8 @@ const userSchema = new mongoose.Schema(
 			zip: { type: String, default: "" },
 			phone: { type: String, default: "" },
 		},
+		resetPasswordToken: { type: String },
+		resetPasswordExpires: { type: Date },
 	},
 	{ minimize: false }
 );
