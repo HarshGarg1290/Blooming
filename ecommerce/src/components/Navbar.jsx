@@ -120,7 +120,7 @@ const Navbar = () => {
 
 				<div className="flex items-center gap-4">
 					
-						<div className="flex flex-row gap-4 ">
+						<div className="flex flex-row gap-4 items-center min-w-[40px]">
 							<p className="text-gray-800 font-semibold hidden sm:block w-[130px] truncate overflow-hidden whitespace-nowrap">
 								Hey, {token ? userName : "User"}!
 							</p>
@@ -130,9 +130,10 @@ const Navbar = () => {
 								}}
 								src={assets.profile_icon}
 								alt=""
-								className=" w-5 cursor-pointer 
+								className="w-5 h-5 cursor-pointer 
 								group-hover:-rotate-12
-								transition-transform duration-300 "
+								transition-transform duration-300 
+								flex-shrink-0"
 							/>
 						</div>
 
