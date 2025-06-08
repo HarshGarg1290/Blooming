@@ -16,6 +16,8 @@ import Search from "./components/Search";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import ScrollToTop from "./components/ScrollToTop";
+import LogoAnimation from "./pages/Loading";
+import About from "./pages/About";
 
 const App = () => {
 	const { isCartOpen, toggleCart } = useContext(ShopContext);
@@ -27,13 +29,14 @@ const App = () => {
 
 	return (
 		<div className="relative">
+			<LogoAnimation />
 			<ScrollToTop />
 			<ToastContainer />
 			<Navbar />
 
 			<div className="">
 				.
-				<div className="mt-12 sm:mt-[88px]">
+				<div className="mt-12 sm:mt-[130px]">
 					<Search />
 				</div>
 				{isCartOpen && (
@@ -44,14 +47,7 @@ const App = () => {
 				)}
 				<Cart isOpen={isCartOpen} onClose={toggleCart} />
 				<Routes>
-					<Route
-						path="/"
-						element={
-						
-								<Home />
-						
-						}
-					/>
+					<Route path="/" element={<Home />} />
 					<Route
 						path="/collection"
 						element={
@@ -65,6 +61,14 @@ const App = () => {
 						element={
 							<PageWrapper>
 								<Contact />
+							</PageWrapper>
+						}
+					/>
+					<Route
+						path="/about"
+						element={
+							<PageWrapper>
+								<About />
 							</PageWrapper>
 						}
 					/>
