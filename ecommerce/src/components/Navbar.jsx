@@ -96,7 +96,7 @@ const Navbar = () => {
 							transition-all duration-300"
 						/>
 					</NavLink>
-					{["COLLECTION", "CONTACT" ,"ABOUT"].map((item) => (
+					{["COLLECTION", "CONTACT", "ABOUT"].map((item) => (
 						<NavLink
 							key={item}
 							to={`/${item.toLowerCase()}`}
@@ -119,8 +119,8 @@ const Navbar = () => {
 				</ul>
 
 				<div className="flex items-center gap-4">
-					
-						<div className="sm:flex flex-row sm:gap-4 items-center min-w-[20px]">
+					<div className="group relative  ">
+						<div className="flex flex-row gap-4 items-center min-w-[20px] ">
 							<p className="text-gray-800 font-semibold hidden sm:block w-[130px] truncate overflow-hidden whitespace-nowrap">
 								Hey, {token ? userName : "User"}!
 							</p>
@@ -130,10 +130,9 @@ const Navbar = () => {
 								}}
 								src={assets.profile_icon}
 								alt=""
-								className="w-5 h-5 cursor-pointer 
+								className=" w-5 h-5 cursor-pointer 
 								group-hover:-rotate-12
-								transition-transform duration-300 
-								flex-shrink-0"
+								transition-transform duration-300 flex-shrink-0 "
 							/>
 						</div>
 
@@ -178,7 +177,7 @@ const Navbar = () => {
 								</div>
 							</div>
 						)}
-				
+					</div>
 					<img
 						onClick={handleSearchClick}
 						src={assets.search_icon}
@@ -222,7 +221,6 @@ const Navbar = () => {
 				</div>
 			</div>
 
-	
 			<div
 				className={`fixed top-0 right-0 bottom-0 left-0 z-50
 					bg-gradient-to-br from-purple-50 to-purple-100 
@@ -255,7 +253,7 @@ const Navbar = () => {
 					>
 						HOME
 					</NavLink>
-					{["COLLECTION", "CONTACT","ABOUT"].map((item) => (
+					{["COLLECTION", "CONTACT", "ABOUT"].map((item) => (
 						<NavLink
 							key={item}
 							onClick={() => setVisible(false)}
