@@ -205,7 +205,7 @@ const Navbar = () => {
 						group-hover:scale-110 
 						transition-transform"
 						>
-							{getCartCount()}
+							{getCartCount}
 						</p>
 					</button>
 

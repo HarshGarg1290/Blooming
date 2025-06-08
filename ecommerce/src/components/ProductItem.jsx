@@ -13,6 +13,13 @@ const ProductItem = ({ id, image, name, price }) => {
 						style={{ objectPosition: "center top" }}
 						src={image[0]}
 						alt={name}
+						loading="lazy"
+						decoding="async"
+						onError={(e) => {
+							e.target.src = "/placeholder.png";
+							e.target.alt = "Image not available";
+							
+						}}
 					/>
 				</div>
 				<div className="text-center font-hubot">

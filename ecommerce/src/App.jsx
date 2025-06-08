@@ -1,24 +1,34 @@
 import { Routes, Route } from "react-router-dom";
-import { useContext } from "react"; // Add this import
-import { ShopContext } from "./context/ShopContext"; // Add this import
-import Home from "./pages/Home";
-import Collection from "./pages/Collection";
-import Cart from "./pages/Cart"; // This will now be your sidebar
+import { useContext, Suspense, lazy } from "react"; // Add Suspense, lazy
+import { ShopContext } from "./context/ShopContext";
 
-import Contact from "./pages/Contact";
-import Product from "./pages/Product";
-import Login from "./pages/Login";
-import PlaceOrder from "./pages/PlaceOrder";
-import Orders from "./pages/Orders";
+// 🚀 KEEP CRITICAL COMPONENTS EAGER (always needed)
 import Navbar from "./components/Navbar";
 import Footer from "./components/Footer";
 import Search from "./components/Search";
+import Cart from "./pages/Cart";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import ScrollToTop from "./components/ScrollToTop";
 import LogoAnimation from "./pages/Loading";
-import About from "./pages/About";
-import ResetPassword from "./pages/ResetPassword";
+
+
+const Home = lazy(() => import("./pages/Home"));
+const Collection = lazy(() => import("./pages/Collection"));
+const Contact = lazy(() => import("./pages/Contact"));
+const Product = lazy(() => import("./pages/Product"));
+const Login = lazy(() => import("./pages/Login"));
+const PlaceOrder = lazy(() => import("./pages/PlaceOrder"));
+const Orders = lazy(() => import("./pages/Orders"));
+const About = lazy(() => import("./pages/About"));
+const ResetPassword = lazy(() => import("./pages/ResetPassword"));
+
+
+const PageLoader = () => (
+	<div className="flex items-center justify-center min-h-[200px]">
+		<div className="w-8 h-8 border-4 border-purple-300 border-t-purple-600 rounded-full animate-spin"></div>
+	</div>
+);
 
 const App = () => {
 	const { isCartOpen, toggleCart } = useContext(ShopContext);
@@ -37,7 +47,7 @@ const App = () => {
 
 			<div className="">
 				.
-				<div className="mt-16 sm:mt-[130px]">
+				<div className="mt-16 sm:mt-[117px]">
 					<Search />
 				</div>
 				{isCartOpen && (
@@ -47,73 +57,77 @@ const App = () => {
 					/>
 				)}
 				<Cart isOpen={isCartOpen} onClose={toggleCart} />
-				<Routes>
-					<Route path="/" element={<Home />} />
-					<Route
-						path="/collection"
-						element={
-							<PageWrapper>
-								<Collection />
-							</PageWrapper>
-						}
-					/>
-					<Route
-						path="/contact"
-						element={
-							<PageWrapper>
-								<Contact />
-							</PageWrapper>
-						}
-					/>
-					<Route
-						path="/about"
-						element={
-							<PageWrapper>
-								<About />
-							</PageWrapper>
-						}
-					/>
-					<Route
-						path="/product/:productId"
-						element={
-							<PageWrapper>
-								<Product />
-							</PageWrapper>
-						}
-					/>
-					<Route
-						path="/login"
-						element={
-							<PageWrapper>
-								<Login />
-							</PageWrapper>
-						}
-					/>
-					<Route
-						path="/reset-password/:token"
-						element={
-							<PageWrapper>
-								<ResetPassword />
-							</PageWrapper>
-						}
-					/>
-					<Route
-						path="/orders"
-						element={
-							<PageWrapper>
-								<Orders />
-							</PageWrapper>
-						}
-					/>
-					<Route
-						path="/place-order"
-						element={
-							<PageWrapper>
-								<PlaceOrder />
-							</PageWrapper>
-						}
-					/>
-				</Routes>
+
+				{/* 🚀 ADD SUSPENSE - KEEPS YOUR EXACT LAYOUT */}
+				<Suspense fallback={<PageLoader />}>
+					<Routes>
+						<Route path="/" element={<Home />} />
+						<Route
+							path="/collection"
+							element={
+								<PageWrapper>
+									<Collection />
+								</PageWrapper>
+							}
+						/>
+						<Route
+							path="/contact"
+							element={
+								<PageWrapper>
+									<Contact />
+								</PageWrapper>
+							}
+						/>
+						<Route
+							path="/about"
+							element={
+								<PageWrapper>
+									<About />
+								</PageWrapper>
+							}
+						/>
+						<Route
+							path="/product/:productId"
+							element={
+								<PageWrapper>
+									<Product />
+								</PageWrapper>
+							}
+						/>
+						<Route
+							path="/login"
+							element={
+								<PageWrapper>
+									<Login />
+								</PageWrapper>
+							}
+						/>
+						<Route
+							path="/reset-password/:token"
+							element={
+								<PageWrapper>
+									<ResetPassword />
+								</PageWrapper>
+							}
+						/>
+						<Route
+							path="/orders"
+							element={
+								<PageWrapper>
+									<Orders />
+								</PageWrapper>
+							}
+						/>
+						<Route
+							path="/place-order"
+							element={
+								<PageWrapper>
+									<PlaceOrder />
+								</PageWrapper>
+							}
+						/>
+					</Routes>
+				</Suspense>
 			</div>
 			<Footer />
 		</div>
