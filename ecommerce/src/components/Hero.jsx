@@ -112,7 +112,6 @@ const Hero = () => {
     return (
         <div className="hero-container relative lg:min-h-screen overflow-hidden bg-gradient-to-br from-white to-gray-50 sm:mt-[120px]">
             
-            {/* Background Decorative Element */}
             <div className="relative inset-0 w-full">
                 <div
                     className={`hero-decorative absolute sm:block w-[600px] h-[600px] transition-all duration-1000 ease-in-out 
