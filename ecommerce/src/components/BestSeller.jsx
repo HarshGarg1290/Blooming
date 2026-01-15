@@ -2,6 +2,7 @@ import { useContext, useEffect, useState } from "react";
 import { ShopContext } from "../context/ShopContext";
 import Title from "./Title";
 import ProductItem from "./ProductItem";
+import useImagePreloader from "../hooks/useImagePreloader";
 
 
 let AOS;
@@ -9,6 +10,10 @@ let AOS;
 const BestSeller = () => {
     const { products } = useContext(ShopContext);
     const [bestSeller, setBestSeller] = useState([]);
+
+    // 🚀 Preload bestseller images for instant loading
+    const bestSellerImages = bestSeller.map(item => item.image?.[0]).filter(Boolean);
+    useImagePreloader(bestSellerImages);
 
     useEffect(() => {
         const initAOS = async () => {
@@ -27,11 +32,20 @@ const BestSeller = () => {
         if (products.length > 0) {
             initAOS();
         }
-    }, []);
+    }, [products.length]);
 
     useEffect(() => {
         const bestProduct = products.filter((item) => item.name);
-        setBestSeller(bestProduct.slice(0, 4));
+        const bestSellerItems = bestProduct.slice(0, 4);
+        setBestSeller(bestSellerItems);
+        
+        // 🚀 PRELOAD BESTSELLER IMAGES for faster loading
+        bestSellerItems.forEach((item) => {
+            if (item.image && item.image[0]) {
+                const img = new Image();
+                img.src = item.image[0];
+            }
+        });
     }, [products]);
 
     return (
@@ -80,6 +94,7 @@ const BestSeller = () => {
                             image={item.image}
                             name={item.name}
                             price={item.price}
+                            isBestSeller={true}
                         />
                     </div>
                 ))}

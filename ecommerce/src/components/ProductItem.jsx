@@ -1,25 +1,20 @@
 import { useContext } from "react";
 import { ShopContext } from "../context/ShopContext";
 import { Link } from "react-router-dom";
+import OptimizedImage from "./OptimizedImage";
 
-const ProductItem = ({ id, image, name, price }) => {
+const ProductItem = ({ id, image, name, price, isBestSeller = false }) => {
 	const { currency } = useContext(ShopContext);
 	return (
 		<Link className="text-gray-700 cursor-pointer block" to={`/product/${id}`}>
 			<div className="space-y-2">
 				<div className="overflow-hidden">
-					<img
-						className="w-full object-cover object-center  hover:scale-200 transition ease-in-out duration-700 p-4"
-						style={{ objectPosition: "center top" }}
+					<OptimizedImage
 						src={image[0]}
 						alt={name}
-						loading="lazy"
-						decoding="async"
-						onError={(e) => {
-							e.target.src = "/placeholder.png";
-							e.target.alt = "Image not available";
-							
-						}}
+						className="w-full object-cover object-center hover:scale-200 transition ease-in-out duration-700 p-4"
+						style={{ objectPosition: "center top" }}
+						isCritical={isBestSeller}
 					/>
 				</div>
 				<div className="text-center font-hubot">

@@ -11,8 +11,9 @@ import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import ScrollToTop from "./components/ScrollToTop";
 import LogoAnimation from "./pages/Loading";
+import LogoLoader from "./components/LogoLoader";
 
-
+// 🚀 LAZY LOAD PAGES (loaded on demand)
 const Home = lazy(() => import("./pages/Home"));
 const Collection = lazy(() => import("./pages/Collection"));
 const Contact = lazy(() => import("./pages/Contact"));
@@ -22,13 +23,6 @@ const PlaceOrder = lazy(() => import("./pages/PlaceOrder"));
 const Orders = lazy(() => import("./pages/Orders"));
 const About = lazy(() => import("./pages/About"));
 const ResetPassword = lazy(() => import("./pages/ResetPassword"));
-
-
-const PageLoader = () => (
-	<div className="flex items-center justify-center min-h-[200px]">
-		<div className="w-8 h-8 border-4 border-purple-300 border-t-purple-600 rounded-full animate-spin"></div>
-	</div>
-);
 
 const App = () => {
 	const { isCartOpen, toggleCart } = useContext(ShopContext);
@@ -59,7 +53,7 @@ const App = () => {
 				<Cart isOpen={isCartOpen} onClose={toggleCart} />
 
 				{/* 🚀 ADD SUSPENSE - KEEPS YOUR EXACT LAYOUT */}
-				<Suspense fallback={<PageLoader />}>
+				<Suspense fallback={<LogoLoader />}>
 					<Routes>
 						<Route path="/" element={<Home />} />
 						<Route

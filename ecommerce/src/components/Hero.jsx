@@ -158,7 +158,7 @@ const Hero = () => {
                     <div className="flex flex-col sm:flex-row items-center gap-4 justify-center lg:justify-start">
                         <Link to="/collection">
                             <button className="group flex items-center gap-2 py-4 px-8 bg-purple-900 text-white font-medium tracking-wide rounded-full hover:bg-gray-800 transition-all duration-500 transform hover:scale-105 hover:shadow-xl">
-                                Explore Collection
+                                Shop All
                                 <ArrowRight
                                     className="transition-transform duration-500 group-hover:translate-x-1"
                                     size={20}

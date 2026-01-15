@@ -15,6 +15,7 @@ const List = ({ token }) => {
 		washCare: "",
 		images: [],
 	});
+	const [uploading, setUploading] = useState(false);
 
 	const fetchList = async () => {
 		try {
@@ -50,13 +51,59 @@ const List = ({ token }) => {
 	// Open Edit Form
 	const editProduct = (product) => {
 		setEditingProduct(product);
-		setFormData({ ...product });
+		setFormData({ ...product, images: product.image || [] });
 	};
 
 	// Handle Form Change
 	const handleChange = (e) => {
 		const { name, value } = e.target;
 		setFormData((prev) => ({ ...prev, [name]: value }));
+	};
+
+	// Handle Image Upload
+	const handleImageUpload = async (e) => {
+		const files = Array.from(e.target.files);
+		setUploading(true);
+
+		const uploadedImages = await Promise.all(
+			files.map(async (file) => {
+				const formData = new FormData();
+				formData.append("file", file);
+				formData.append("upload_preset", "product"); // Replace with your preset
+
+				try {
+					const response = await fetch(
+						"https://api.cloudinary.com/v1_1/dufctt2le/image/upload",
+						{
+							method: "POST",
+							body: formData,
+						}
+					);
+					const data = await response.json();
+					return data.secure_url; // Cloudinary URL
+				} catch (error) {
+					console.error("Upload failed", error);
+					toast.error("Image upload failed");
+					return null;
+				}
+			})
+		);
+
+		// Filter out failed uploads and update state
+		const validImages = uploadedImages.filter((url) => url);
+		setFormData((prev) => ({
+			...prev,
+			images: [...prev.images, ...validImages],
+		}));
+		setUploading(false);
+	};
+
+	// Handle Remove Image
+	const handleRemoveImage = (index) => {
+		setFormData((prev) => ({
+			...prev,
+			images: prev.images.filter((_, i) => i !== index),
+		}));
 	};
 
 	// Update Product
@@ -124,9 +171,56 @@ const List = ({ token }) => {
 
 			{/* Edit Product Modal */}
 			{editingProduct && (
-				<div className="fixed inset-0 flex items-center justify-center bg-gray-900 bg-opacity-50">
-					<div className="bg-white p-6 rounded shadow-md w-1/2">
-						<h2 className="text-xl mb-4">Edit Product</h2>
+				<div className="fixed inset-0 flex items-center justify-center bg-gray-900 bg-opacity-50 z-50 overflow-y-auto">
+					<div className="bg-white p-6 rounded shadow-md w-11/12 md:w-3/4 lg:w-1/2 max-h-[90vh] overflow-y-auto my-4">
+						<h2 className="text-xl mb-4 font-bold">Edit Product</h2>
+
+						{/* Image Upload Section */}
+						<div className="mb-4">
+							<label className="block mb-2 font-semibold">
+								Product Images:
+							</label>
+							<div className="flex gap-2 flex-wrap mb-2">
+								{formData.images &&
+									formData.images.map((image, index) => (
+										<div key={index} className="relative w-20 h-20">
+											<img
+												className="w-20 h-20 object-cover border rounded"
+												src={image}
+												alt={`Product ${index}`}
+											/>
+											<button
+												type="button"
+												className="absolute -top-2 -right-2 bg-red-600 text-white text-xs w-6 h-6 rounded-full hover:bg-red-700"
+												onClick={() => handleRemoveImage(index)}
+											>
+												X
+											</button>
+										</div>
+									))}
+
+								{/* Upload new images */}
+								<label className="w-20 h-20 border-2 border-dashed border-gray-300 rounded flex items-center justify-center cursor-pointer hover:border-gray-400">
+									<span className="text-3xl text-gray-400">+</span>
+									<input
+										type="file"
+										multiple
+										accept="image/*"
+										onChange={handleImageUpload}
+										hidden
+									/>
+								</label>
+
+								{uploading && (
+									<div className="w-20 h-20 flex items-center justify-center">
+										<div className="w-10 h-10 border-4 border-gray-300 border-t-blue-600 rounded-full animate-spin"></div>
+									</div>
+								)}
+							</div>
+							<p className="text-xs text-gray-500">
+								Click + to add more images or X to remove
+							</p>
+						</div>
 
 						<label>Name:</label>
 						<input
@@ -138,12 +232,11 @@ const List = ({ token }) => {
 						/>
 
 						<label>Description:</label>
-						<input
-							type="text"
+						<textarea
 							name="description"
 							value={formData.description}
 							onChange={handleChange}
-							className="border p-2 w-full mb-2"
+							className="border p-2 w-full mb-2 min-h-[80px]"
 						/>
 
 						<label>Price:</label>
@@ -185,13 +278,13 @@ const List = ({ token }) => {
 						<div className="flex justify-between mt-4">
 							<button
 								onClick={updateProduct}
-								className="bg-green-500 text-white px-4 py-2 rounded"
+								className="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600"
 							>
 								Update
 							</button>
 							<button
 								onClick={() => setEditingProduct(null)}
-								className="bg-red-500 text-white px-4 py-2 rounded"
+								className="bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600"
 							>
 								Cancel
 							</button>
