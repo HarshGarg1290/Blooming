@@ -81,12 +81,12 @@ const BestSeller = () => {
 
             {/* Product Grid */}
             <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-6 mt-12">
-                {bestSeller.map((item, index) => (
+                {bestSeller.map((item) => (
                     <div
                         key={item._id}
                         data-aos="zoom-in-up"
                         data-aos-duration="600"
-                        data-aos-delay={index * 150}
+                        data-aos-delay={0}
                         className="bg-white shadow-lg overflow-hidden transform transition-all duration-300 hover:scale-105"
                     >
                         <ProductItem
@@ -94,7 +94,7 @@ const BestSeller = () => {
                             image={item.image}
                             name={item.name}
                             price={item.price}
-                            isBestSeller={true}
+                            eager={true}
                         />
                     </div>
                 ))}

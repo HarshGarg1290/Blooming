@@ -1,4 +1,5 @@
-import { useContext, useEffect, useState, useMemo } from "react";
+import { useContext, useEffect, useMemo, useRef, useState } from "react";
+import { transformCloudinary } from "../utils/image";
 import { ShopContext } from "../context/ShopContext";
 import Title from "../components/Title";
 import ProductItem from "../components/ProductItem";
@@ -10,14 +11,8 @@ const Collection = () => {
     const { products, search, showSearch } = useContext(ShopContext);
     const [sortedProducts, setSortedProducts] = useState(products);
     const [sortOption, setSortOption] = useState("default");
-    const [isProcessing, setIsProcessing] = useState(false);
-
-
-    const visibleProductImages = useMemo(() => 
-        sortedProducts.slice(0, 8).map(item => item.image?.[0]).filter(Boolean),
-        [sortedProducts]
-    );
-    useImagePreloader(visibleProductImages);
+    const [gridReady, setGridReady] = useState(false);
+    const observerRef = useRef(null);
 
     useEffect(() => {
         const initAOS = async () => {
@@ -50,24 +45,89 @@ const Collection = () => {
                     newSortedProducts.sort((a, b) => a.price - b.price);
                     break;
                 case "high-low":
-                    newSortedProducts.sort((a, b) => b.price - a.price);
-                    break;
-                default:
-                    break;
+        let newSortedProducts = [...products];
+
+        switch (sortOption) {
+            case "low-high":
+                newSortedProducts.sort((a, b) => a.price - b.price);
+                break;
+            case "high-low":
+                newSortedProducts.sort((a, b) => b.price - a.price);
+                break;
+            default:
+                break;
+        }
+
+        if (showSearch && search) {
+            newSortedProducts = newSortedProducts.filter((item) =>
+                item.name.toLowerCase().includes(search.toLowerCase())
+            );
+        }
+
+        setSortedProducts(newSortedProductse grid waits; title and controls show immediately
+    useEffect(() => {
+        // Reset readiness when product set changes
+        setGridReady(false);
+
+        if (gridImageUrls.length === 0) {
+            // No images to load (e.g., empty results) -> don't block UI
+            setGridReady(true);
+            return;
+        }
+
+        let isCancelled = false;
+        const preload = (src) =>
+            new Promise((resolve) => {
+                const img = new Image();
+                img.onload = () => resolve(true);
+                img.onerror = () => resolve(false);
+                img.src = src;
+            });
+
+        Promise.all(gridImageUrls.map(preload)).then(() => {
+            if (!isCancelled) {
+                setGridReady(true);
+                // Refresh AOS after content mounts so animations work
+                try {
+                    AOS?.refreshHard?.();
+                } catch {
+                    // no-op
+                }
             }
+        });
 
-            if (showSearch && search) {
-                newSortedProducts = newSortedProducts.filter((item) =>
-                    item.name.toLowerCase().includes(search.toLowerCase())
-                );
+        return () => {
+            isCancelled = true;
+        };
+    }, [gridImageUrls]);
+
+    // Prefetch next-row images when near viewport to avoid pop-in during scroll
+    useEffect(() => {
+        if (!('IntersectionObserver' in window)) return; // Fallback silently
+        if (!sortedProducts || sortedProducts.length === 0) return;
+
+        // Disconnect previous observer
+        observerRef.current?.disconnect?.();
+        observerRef.current = new IntersectionObserver((entries) => {
+            for (const entry of entries) {
+                if (entry.isIntersecting) {
+                    const src = entry.target.getAttribute('data-preload-src');
+                    if (src) {
+                        const img = new Image();
+                        img.src = src; // Browser caches it; decode may happen earlier
+                        entry.target.removeAttribute('data-preload-src');
+                    }
+                    observerRef.current?.unobserve?.(entry.target);
+                }
             }
+        }, { rootMargin: '600px 0px 600px 0px' });
 
-            setSortedProducts(newSortedProducts);
-            setIsProcessing(false);
-        }, 100);
+        // Attach to invisible sentinels per item (added in render below)
+        const nodes = document.querySelectorAll('[data-preload-src]');
+        nodes.forEach((n) => observerRef.current.observe(n));
 
-        return () => clearTimeout(timer);
-    }, [products, sortOption, showSearch, search]);
+        return () => observerRef.current?.disconnect?.();
+    }, [sortedProducts]);
 
     const handleSortChange = (e) => {
         setSortOption(e.target.value);
@@ -106,6 +166,7 @@ const Collection = () => {
             </div>
 
             <div>
+<<<<<<< HEAD
                 <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-4 gap-3 gap-y-3">
                     {isProcessing ? (
                         // 🚀 Show skeleton loaders while processing
@@ -113,29 +174,38 @@ const Collection = () => {
                             <ProductSkeleton key={index} />
                         ))
                     ) : (
-                        sortedProducts.map((item, index) => (
+                {!gridReady ? (
+                    <div className="min-h-[40vh] flex items-center justify-center">
+                        <div className="w-10 h-10 border-4 border-purple-300 border-t-purple-600 rounded-full animate-spin" />
+                    </div>
+                ) : (
+                    <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-4 gap-3 gap-y-3">
+                        {sortedProducts.map((item, index) => {
+                            // Eager load the first two rows to avoid pop-in on typical screens
+                            const eager = index < 8; // 2 rows on desktop
+                            const delay = eager ? 0 : Math.min(index * 80, 480);
+                            const preloadSrc = Array.isArray(item.image) ? transformCloudinary(item.image[0], { width: 640, height: 800 }) : null;
+                            return (
                             <div
                                 key={item._id}
                                 data-aos="zoom-in-up"
                                 data-aos-duration="600"
-                                data-aos-delay={Math.min(index * 100, 1000)} // 🚀 Cap delay to prevent too long delays
+                                data-aos-delay={delay}
                                 className="border-2 border-[#3c3b3c] border-opacity-10"
                             >
+                                {/* Invisible preload sentinel to trigger prefetch via IO */}
+                                {preloadSrc && (
+                                    <span className="sr-only" aria-hidden="true" data-preload-src={preloadSrc}></span>
+                                )}
                                 <ProductItem
                                     id={item._id}
                                     image={item.image}
                                     name={item.name}
                                     price={item.price}
-                                    // 🚀 Prioritize first 8 images (above the fold)
-                                    isBestSeller={index < 8}
+                                    eager={eager}
                                 />
                             </div>
-                        ))
-                    )}
-                </div>
-            </div>
-        </div>
-    );
-};
-
-export default Collection;
+                            );
+                        })}
+                    </div>
+                )}
