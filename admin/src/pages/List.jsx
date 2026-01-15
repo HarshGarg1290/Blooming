@@ -1,6 +1,7 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
 import { backendUrl, currency } from "../App";
+import PropTypes from "prop-types";
 import { toast } from "react-toastify";
 
 const List = ({ token }) => {
@@ -297,3 +298,7 @@ const List = ({ token }) => {
 };
 
 export default List;
+
+List.propTypes = {
+	token: PropTypes.string,
+};
